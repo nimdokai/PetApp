@@ -1,0 +1,28 @@
+<!--
+  ~ Copyright (C) 2022 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="app_name">Midnite</string>
+
+    <string name="dialog_no_internet_title">No internet</string>
+    <string name="dialog_no_internet_body">Please check your internet connection and try again.</string>
+    <string name="dialog_no_internet_retry">Retry</string>
+
+    <string name="dialog_server_error_title">Error</string>
+    <string name="dialog_server_error_body">Whoops! Something went wrong. Try again.</string>
+    <string name="dialog_server_error_retry">Retry</string>
+
+</resources>

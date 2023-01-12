@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:paddingVertical="@dimen/xxs"
+    android:paddingHorizontal="@dimen/sm">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/startTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/awayTeam"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/homeTeam"
+        tools:text="20:00" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/homeTeamImage"
+        android:layout_width="@dimen/item_match_team_image_width"
+        android:layout_height="@dimen/item_match_team_image_height"
+        android:layout_marginStart="@dimen/sm"
+        app:layout_constraintStart_toEndOf="@id/startTime"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/awayTeamImage"
+        android:layout_width="@dimen/item_match_team_image_width"
+        android:layout_height="@dimen/item_match_team_image_height"
+        android:layout_marginStart="@dimen/sm"
+        android:layout_marginTop="@dimen/xxs"
+        app:layout_constraintStart_toEndOf="@id/startTime"
+        app:layout_constraintTop_toBottomOf="@id/homeTeam"
+        tools:src="@tools:sample/avatars" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/homeTeam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/xxs"
+        app:layout_constraintStart_toEndOf="@id/homeTeamImage"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Arsenal" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/awayTeam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/xxs"
+        android:layout_marginTop="@dimen/xxs"
+        app:layout_constraintStart_toEndOf="@id/awayTeamImage"
+        app:layout_constraintTop_toBottomOf="@id/homeTeam"
+        tools:text="Chelsea" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

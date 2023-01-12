@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="xxxxs">2dp</dimen>
+    <dimen name="xxxs">4dp</dimen>
+    <dimen name="xxs">8dp</dimen>
+    <dimen name="xs">12dp</dimen>
+    <dimen name="sm">16dp</dimen>
+    <dimen name="md">24dp</dimen>
+    <dimen name="lg">32dp</dimen>
+    <dimen name="xl">48dp</dimen>
+    <dimen name="xxl">64dp</dimen>
+    <dimen name="xxxl">80dp</dimen>
+    <dimen name="xxxxl">96dp</dimen>
+    <dimen name="xxxxxl">120dp</dimen>
+
+    <dimen name="item_match_team_image_width">18dp</dimen>
+    <dimen name="item_match_team_image_height">18dp</dimen>
+
+    <dimen name="match_details_team_image_width">18dp</dimen>
+    <dimen name="match_details_team_image_height">18dp</dimen>
+
+    <dimen name="title_text_size">20sp</dimen>
+    <dimen name="headline_text_size">16sp</dimen>
+    <dimen name="body_text_size">14sp</dimen>
+
+</resources>

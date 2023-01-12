@@ -1,0 +1,30 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.Midnite" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/colorSecondary</item>
+
+        <!-- AppCompat attributes -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="android:colorBackground">@color/colorPrimary</item>
+        <item name="indicatorColor">@color/colorAccent</item>
+
+        <!-- MaterialComponents attributes. -->
+        <item name="colorPrimaryVariant">@color/colorPrimary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondary</item>
+        <item name="colorSurface">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/colorPrimary</item>
+        <item name="colorOnSecondary">@color/colorSecondary</item>
+        <item name="colorOnBackground">@color/colorPrimary</item>
+
+        <item name="android:textColor">@color/colorOnSecondary</item>
+    </style>
+
+    <style name="ContractCardView" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/colorSecondary</item>
+        <item name="cardCornerRadius">6dp</item>
+    </style>
+
+
+</resources>
