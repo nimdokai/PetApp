@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:name="com.nimdokai.midnite.core.testing.HiltTestActivity"
+            android:name="com.nimdokai.pet.core.testing.HiltTestActivity"
             android:exported="false"  />
     </application>
 

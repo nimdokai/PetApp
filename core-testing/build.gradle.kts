@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.nimdokai.midnite.core.testing"
+    namespace = "com.nimdokai.pet.core.testing"
     compileSdk = 33
 
     defaultConfig {

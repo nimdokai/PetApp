@@ -6,17 +6,17 @@ plugins {
 }
 
 android {
-    namespace = "com.nimdokai.midnite"
+    namespace = "com.nimdokai.pet"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.nimdokai.midnite"
+        applicationId = "com.nimdokai.pet"
         minSdk = 21
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "com.nimdokai.midnite.core.testing.HiltTestRunner"
+        testInstrumentationRunner = "com.nimdokai.pet.core.testing.HiltTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -53,8 +53,8 @@ dependencies {
     debugImplementation(project(":core-testing"))
     implementation(project(":core-util"))
     androidTestImplementation(project(":core-testing"))
-    implementation(project(":feature-matches"))
-    implementation(project(":feature-matchdetails"))
+    implementation(project(":feature-categories"))
+    implementation(project(":feature-petdetails"))
 
     // Core Android dependencies
     implementation(libs.androidx.core.ktx)

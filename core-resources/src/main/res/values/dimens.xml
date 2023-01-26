@@ -14,11 +14,11 @@
     <dimen name="xxxxl">96dp</dimen>
     <dimen name="xxxxxl">120dp</dimen>
 
-    <dimen name="item_match_team_image_width">18dp</dimen>
-    <dimen name="item_match_team_image_height">18dp</dimen>
+    <dimen name="item_category_team_image_width">18dp</dimen>
+    <dimen name="item_category_team_image_height">18dp</dimen>
 
-    <dimen name="match_details_team_image_width">18dp</dimen>
-    <dimen name="match_details_team_image_height">18dp</dimen>
+    <dimen name="pet_details_team_image_width">18dp</dimen>
+    <dimen name="pet_details_team_image_height">18dp</dimen>
 
     <dimen name="title_text_size">20sp</dimen>
     <dimen name="headline_text_size">16sp</dimen>

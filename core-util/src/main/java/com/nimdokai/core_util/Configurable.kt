@@ -1,6 +1,6 @@
 package com.nimdokai.core_util
 
-import com.nimdokai.midnite.core.util.BuildConfig
+import com.nimdokai.pet.core.util.BuildConfig
 import javax.inject.Inject
 
 interface Configurable {

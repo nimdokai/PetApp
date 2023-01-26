@@ -3,7 +3,7 @@
 
     <!-- graphs -->
 
-    <item name="match_details_nav_graph" type="id" />
-    <item name="matches_nav_graph" type="id" />
+    <item name="pet_details_nav_graph" type="id" />
+    <item name="categories_nav_graph" type="id" />
 
 </resources>

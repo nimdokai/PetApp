@@ -2,9 +2,9 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/matches_nav_graph">
+    app:startDestination="@id/categories_nav_graph">
 
-    <include app:graph="@navigation/matches_nav_graph" />
-    <include app:graph="@navigation/match_details_nav_graph" />
+    <include app:graph="@navigation/categories_nav_graph" />
+    <include app:graph="@navigation/pet_details_nav_graph" />
 
 </navigation>

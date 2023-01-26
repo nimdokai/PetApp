@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.nimdokai.midnite.core.resources"
+    namespace = "com.nimdokai.pet.core.resources"
     compileSdk = 33
 
     defaultConfig {

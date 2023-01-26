@@ -11,14 +11,14 @@ val localProperties = Properties()
 localProperties.load(FileInputStream(File(rootProject.projectDir, "local.properties")))
 
 android {
-    namespace = "com.nimdokai.midnite.core.util"
+    namespace = "com.nimdokai.pet.core.util"
     compileSdk = 33
 
     defaultConfig {
         minSdk = 21
         targetSdk = 33
 
-        testInstrumentationRunner = "com.nimdokai.midnite.core.testing.HiltTestRunner"
+        testInstrumentationRunner = "com.nimdokai.pet.core.testing.HiltTestRunner"
         consumerProguardFiles("consumer-rules.pro")
 
         // Please make sure to add API KEY to your `local.properties` file

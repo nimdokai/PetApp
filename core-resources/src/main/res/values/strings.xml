@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="app_name">Midnite</string>
+    <string name="app_name">Pet</string>
 
     <string name="dialog_no_internet_title">No internet</string>
     <string name="dialog_no_internet_body">Please check your internet connection and try again.</string>

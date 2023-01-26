@@ -27,12 +27,12 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Midnite"
+rootProject.name = "Pet"
 
 include(":app")
 include(":core-data")
 include(":core-testing")
 include(":core-resources")
-include(":feature-matches")
+include(":feature-categories")
 include(":core-util")
-include(":feature-matchdetails")
+include(":feature-petdetails")

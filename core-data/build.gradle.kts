@@ -5,14 +5,14 @@ plugins {
 }
 
 android {
-    namespace = "com.nimdokai.midnite.core.data"
+    namespace = "com.nimdokai.pet.core.data"
     compileSdk = 33
 
     defaultConfig {
         minSdk = 21
         targetSdk = 33
 
-        testInstrumentationRunner = "com.nimdokai.midnite.core.testing.HiltTestRunner"
+        testInstrumentationRunner = "com.nimdokai.pet.core.testing.HiltTestRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
     compileOptions {
