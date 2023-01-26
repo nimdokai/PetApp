@@ -15,7 +15,6 @@ android {
         testInstrumentationRunner = "com.nimdokai.midnite.core.testing.HiltTestRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -27,6 +26,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":core-util"))
+
     // Arch Components
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

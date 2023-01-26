@@ -1,6 +1,6 @@
 package com.nimdokai.midnite.core.data.model
 
-data class MatchDetails(
+data class AnimalDetails(
     val id: Int,
     val name: String,
     val startTime: String,

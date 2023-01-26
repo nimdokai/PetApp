@@ -1,13 +1,10 @@
 package com.nimdokai.midnite.feature.matches.ui
 
-import com.nimdokai.midnite.core.data.model.Matches
+import com.nimdokai.midnite.core.data.model.AnimalCategoryResponse
 
-data class MatchItemUI(
+data class AnimalCategoryItemUI(
     val id: Int,
     val name: String,
-    val homeTeam: TeamUI,
-    val awayTeam: TeamUI,
-    val startTime: String,
 )
 
 data class TeamUI(
@@ -15,4 +12,4 @@ data class TeamUI(
     val imageUrl: String
 )
 
-internal fun Matches.Team.toUI() = TeamUI(name, imageUrl)
+internal fun AnimalCategoryResponse.toUI() = AnimalCategoryItemUI(id, name)

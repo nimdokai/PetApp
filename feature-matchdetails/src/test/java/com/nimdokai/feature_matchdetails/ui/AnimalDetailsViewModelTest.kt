@@ -6,8 +6,8 @@ import com.nimdokai.core_util.navigation.date.DateFormatter
 import com.nimdokai.feature_matchdetails.navigation.MatchDetailsNavigatorDefault.MatchDetailsArgs
 import com.nimdokai.feature_matchdetails.ui.MatchDetailsUI.MatchDetailsListItem
 import com.nimdokai.midnite.core.data.GetMatchDetailsResponse
-import com.nimdokai.midnite.core.data.MatchesRepository
-import com.nimdokai.midnite.core.data.model.MatchDetails
+import com.nimdokai.midnite.core.data.AnimalRepository
+import com.nimdokai.midnite.core.data.model.AnimalDetails
 import com.nimdokai.midnite.core.resources.R
 import com.nimdokai.midnite.core.testing.TestCoroutineDispatchers
 import com.nimdokai.midnite.core.testing.ViewModelFlowCollector
@@ -19,9 +19,9 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class MatchDetailsViewModelTest {
+class AnimalDetailsViewModelTest {
 
-    private val matchesRepository: MatchesRepository = mockk()
+    private val animalRepository: AnimalRepository = mockk()
     private val savedStateHandle: SavedStateHandle = mockk()
     private val dateFormatter: DateFormatter = mockk()
 
@@ -34,7 +34,7 @@ class MatchDetailsViewModelTest {
 
         viewModel = MatchDetailsViewModel(
             savedStateHandle,
-            matchesRepository,
+            animalRepository,
             TestCoroutineDispatchers,
             dateFormatter
         )
@@ -46,7 +46,7 @@ class MatchDetailsViewModelTest {
     fun `GIVEN matchesRepository returns ServerError WHEN onFirstLaunch is called THEN ShowError event should be emitted`() =
         collector.runBlockingTest { _, events ->
             //GIVEN
-            coEvery { matchesRepository.getMatchDetails(0) } returns GetMatchDetailsResponse.ServerError
+            coEvery { animalRepository.getAnimalDetails(0) } returns GetMatchDetailsResponse.ServerError
 
             //WHEN
             viewModel.onFirstLaunch()
@@ -66,7 +66,7 @@ class MatchDetailsViewModelTest {
     fun `GIVEN matchesRepository returns NoInternet WHEN onFirstLaunch is called THEN ShowError event should be emitted`() =
         collector.runBlockingTest { _, events ->
             //GIVEN
-            coEvery { matchesRepository.getMatchDetails(0) } returns GetMatchDetailsResponse.NoInternet
+            coEvery { animalRepository.getAnimalDetails(0) } returns GetMatchDetailsResponse.NoInternet
 
             //WHEN
             viewModel.onFirstLaunch()
@@ -87,23 +87,23 @@ class MatchDetailsViewModelTest {
         collector.runBlockingTest { states, _ ->
             //GIVEN
             val result = GetMatchDetailsResponse.Success(
-                MatchDetails(
+                AnimalDetails(
                     id = 0,
                     name = "name",
-                    homeTeam = MatchDetails.Team("TeamA", "urlA"),
-                    awayTeam = MatchDetails.Team("TeamB", "urlB"),
+                    homeTeam = AnimalDetails.Team("TeamA", "urlA"),
+                    awayTeam = AnimalDetails.Team("TeamB", "urlB"),
                     startTime = "2023-01-11T11:00:00.000000Z",
                     markets = listOf(
-                        MatchDetails.Market(
+                        AnimalDetails.Market(
                             id = 1, "market1", listOf(
-                                MatchDetails.Contract(2, "contract1", "1.23")
+                                AnimalDetails.Contract(2, "contract1", "1.23")
                             )
                         ),
                     )
                 )
             )
 
-            coEvery { matchesRepository.getMatchDetails(0) } returns result
+            coEvery { animalRepository.getAnimalDetails(0) } returns result
             every { dateFormatter.formatOnlyHourIfToday("2023-01-11T11:00:00.000000Z") } returns "11:00"
 
             //WHEN
@@ -137,7 +137,7 @@ class MatchDetailsViewModelTest {
     fun `GIVEN matchesRepository returns ServerError WHEN onRetryGetMatchDetails is called THEN ShowError event should be emitted`() =
         collector.runBlockingTest { _, events ->
             //GIVEN
-            coEvery { matchesRepository.getMatchDetails(0) } returns GetMatchDetailsResponse.ServerError
+            coEvery { animalRepository.getAnimalDetails(0) } returns GetMatchDetailsResponse.ServerError
 
             //WHEN
             viewModel.onRetryGetMatchDetails()
@@ -157,7 +157,7 @@ class MatchDetailsViewModelTest {
     fun `GIVEN matchesRepository returns NoInternet WHEN onRetryGetMatchDetails is called THEN ShowError event should be emitted`() =
         collector.runBlockingTest { _, events ->
             //GIVEN
-            coEvery { matchesRepository.getMatchDetails(0) } returns GetMatchDetailsResponse.NoInternet
+            coEvery { animalRepository.getAnimalDetails(0) } returns GetMatchDetailsResponse.NoInternet
 
             //WHEN
             viewModel.onRetryGetMatchDetails()
@@ -178,23 +178,23 @@ class MatchDetailsViewModelTest {
         collector.runBlockingTest { states, _ ->
             //GIVEN
             val result = GetMatchDetailsResponse.Success(
-                MatchDetails(
+                AnimalDetails(
                     id = 0,
                     name = "name",
-                    homeTeam = MatchDetails.Team("TeamA", "urlA"),
-                    awayTeam = MatchDetails.Team("TeamB", "urlB"),
+                    homeTeam = AnimalDetails.Team("TeamA", "urlA"),
+                    awayTeam = AnimalDetails.Team("TeamB", "urlB"),
                     startTime = "2023-01-11T11:00:00.000000Z",
                     markets = listOf(
-                        MatchDetails.Market(
+                        AnimalDetails.Market(
                             id = 1, "market1", listOf(
-                                MatchDetails.Contract(2, "contract1", "1.23")
+                                AnimalDetails.Contract(2, "contract1", "1.23")
                             )
                         ),
                     )
                 )
             )
 
-            coEvery { matchesRepository.getMatchDetails(0) } returns result
+            coEvery { animalRepository.getAnimalDetails(0) } returns result
             every { dateFormatter.formatOnlyHourIfToday("2023-01-11T11:00:00.000000Z") } returns "11:00"
 
             //WHEN

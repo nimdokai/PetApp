@@ -18,7 +18,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MatchesFragment : Fragment(R.layout.fragment_matches) {
 
-    private val viewModel by viewModels<MatchesViewModel>()
+    private val viewModel by viewModels<AnimalCategoriesViewModel>()
     private val binding by viewBinding(FragmentMatchesBinding::bind)
 
     private var adapter: MatchesAdapter =
@@ -53,7 +53,7 @@ class MatchesFragment : Fragment(R.layout.fragment_matches) {
     private fun observeState() {
         lifecycleScope.launchWhenStarted {
             viewModel.state.collect { state ->
-                adapter.submitList(state.matchItemList)
+                adapter.submitList(state.categories)
             }
         }
     }

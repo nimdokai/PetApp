@@ -2,7 +2,7 @@ package com.nimdokai.feature_matchdetails.ui
 
 import com.nimdokai.core_util.navigation.date.DateFormatter
 import com.nimdokai.feature_matchdetails.ui.MatchDetailsUI.MatchDetailsListItem
-import com.nimdokai.midnite.core.data.model.MatchDetails
+import com.nimdokai.midnite.core.data.model.AnimalDetails
 
 data class MatchDetailsUI(
     val id: Int,
@@ -34,14 +34,14 @@ data class MatchDetailsUI(
 
 }
 
-internal fun MatchDetails.mapToUI(dateFormatter: DateFormatter): MatchDetailsUI {
+internal fun AnimalDetails.mapToUI(dateFormatter: DateFormatter): MatchDetailsUI {
     return MatchDetailsUI(
         id,
         name,
         dateFormatter.formatOnlyHourIfToday(startTime),
         homeTeam.mapToUI(),
         awayTeam.mapToUI(),
-        markets.flatMap { market: MatchDetails.Market ->
+        markets.flatMap { market: AnimalDetails.Market ->
             val map: List<MatchDetailsListItem> = market.contracts.map {
                 it.mapToUI()
             }
@@ -51,18 +51,18 @@ internal fun MatchDetails.mapToUI(dateFormatter: DateFormatter): MatchDetailsUI 
 }
 
 
-private fun MatchDetails.Team.mapToUI(): MatchDetailsUI.Team {
+private fun AnimalDetails.Team.mapToUI(): MatchDetailsUI.Team {
     return MatchDetailsUI.Team(name, imageUrl)
 }
 
-private fun MatchDetails.Market.mapToUI(): MatchDetailsListItem.Market {
+private fun AnimalDetails.Market.mapToUI(): MatchDetailsListItem.Market {
     return MatchDetailsListItem.Market(
         id,
         name,
     )
 }
 
-private fun MatchDetails.Contract.mapToUI(): MatchDetailsListItem.Contract {
+private fun AnimalDetails.Contract.mapToUI(): MatchDetailsListItem.Contract {
     return MatchDetailsListItem.Contract(id, name, price)
 }
 

@@ -1,8 +1,14 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
 }
+
+val localProperties = Properties()
+localProperties.load(FileInputStream(File(rootProject.projectDir, "local.properties")))
 
 android {
     namespace = "com.nimdokai.midnite.core.util"
@@ -14,6 +20,11 @@ android {
 
         testInstrumentationRunner = "com.nimdokai.midnite.core.testing.HiltTestRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        // Please make sure to add API KEY to your `local.properties` file
+        // cat_api_key="API_KEY_HERE"
+        buildConfigField("String", "CAT_API_KEY", localProperties["cat_api_key"] as String)
+
     }
 
     compileOptions {

@@ -2,9 +2,9 @@ package com.nimdokai.midnite.feature.matches.ui
 
 import com.google.common.truth.Truth.assertThat
 import com.nimdokai.core_util.navigation.date.DateFormatter
-import com.nimdokai.midnite.core.data.GetUpcomingMatchesResponse
-import com.nimdokai.midnite.core.data.MatchesRepository
-import com.nimdokai.midnite.core.data.model.Matches
+import com.nimdokai.midnite.core.data.GetCategoriesResponse
+import com.nimdokai.midnite.core.data.AnimalRepository
+import com.nimdokai.midnite.core.data.model.AnimalCategories
 import com.nimdokai.midnite.core.resources.R
 import com.nimdokai.midnite.core.testing.TestCoroutineDispatchers
 import com.nimdokai.midnite.core.testing.ViewModelFlowCollector
@@ -16,18 +16,18 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class MatchesViewModelTest {
+class AnimalCategoriesViewModelTest {
 
-    private val matchesRepository: MatchesRepository = mockk()
+    private val animalRepository: AnimalRepository = mockk()
     private val dateFormatter: DateFormatter = mockk()
 
-    private lateinit var viewModel: MatchesViewModel
+    private lateinit var viewModel: AnimalCategoriesViewModel
     private lateinit var collector: ViewModelFlowCollector<MatchesUiState, MatchesEvent>
 
     @Before
     fun setUp() {
-        viewModel = MatchesViewModel(
-            matchesRepository,
+        viewModel = AnimalCategoriesViewModel(
+            animalRepository,
             TestCoroutineDispatchers,
             dateFormatter,
         )
@@ -39,7 +39,7 @@ class MatchesViewModelTest {
     fun `GIVEN matchesRepository returns ServerError WHEN onFirstLaunch is called THEN ShowError event should be emitted`() =
         collector.runBlockingTest { _, events ->
             //GIVEN
-            coEvery { matchesRepository.getUpcomingMatches() } returns GetUpcomingMatchesResponse.ServerError
+            coEvery { animalRepository.getCategories() } returns GetCategoriesResponse.ServerError
 
             //WHEN
             viewModel.onFirstLaunch()
@@ -49,7 +49,7 @@ class MatchesViewModelTest {
                 title = R.string.dialog_server_error_title,
                 message = R.string.dialog_server_error_body,
                 buttonText = R.string.dialog_server_error_retry,
-                action = viewModel::onRetryGetUpcomingMatches
+                action = viewModel::onRetryGetCategories
             )
             assertThat(events[0]).isEqualTo(expected)
         }
@@ -58,7 +58,7 @@ class MatchesViewModelTest {
     fun `GIVEN matchesRepository returns NoInternet WHEN onFirstLaunch is called THEN ShowError event should be emitted`() =
         collector.runBlockingTest { _, events ->
             //GIVEN
-            coEvery { matchesRepository.getUpcomingMatches() } returns GetUpcomingMatchesResponse.NoInternet
+            coEvery { animalRepository.getCategories() } returns GetCategoriesResponse.NoInternet
 
 
             //WHEN
@@ -69,7 +69,7 @@ class MatchesViewModelTest {
                 title = R.string.dialog_no_internet_title,
                 message = R.string.dialog_no_internet_body,
                 buttonText = R.string.dialog_no_internet_retry,
-                action = viewModel::onRetryGetUpcomingMatches
+                action = viewModel::onRetryGetCategories
             )
             assertThat(events[0]).isEqualTo(expected)
         }
@@ -79,20 +79,20 @@ class MatchesViewModelTest {
     fun `GIVEN matchesRepository returns Success WHEN onFirstLaunch is called THEN state should be updated`() =
         collector.runBlockingTest { states, _ ->
             //GIVEN
-            val result = GetUpcomingMatchesResponse.Success(
-                Matches(
+            val result = GetCategoriesResponse.Success(
+                AnimalCategories(
                     listOf(
-                        Matches.Match(
+                        AnimalCategories.Match(
                             id = 0,
                             name = "name",
-                            homeTeam = Matches.Team("TeamA", "urlA"),
-                            awayTeam = Matches.Team("TeamB", "urlB"),
+                            homeTeam = AnimalCategories.Team("TeamA", "urlA"),
+                            awayTeam = AnimalCategories.Team("TeamB", "urlB"),
                             startTime = "2023-01-11T11:00:00.000000Z",
                         )
                     )
                 )
             )
-            coEvery { matchesRepository.getUpcomingMatches() } returns result
+            coEvery { animalRepository.getCategories() } returns result
 
             every { dateFormatter.formatOnlyHourIfToday("2023-01-11T11:00:00.000000Z") } returns "11:00"
 
@@ -100,13 +100,13 @@ class MatchesViewModelTest {
             viewModel.onFirstLaunch()
 
             val expectedStates = listOf(
-                MatchesUiState(isLoading = false, matchItemList = emptyList()),
-                MatchesUiState(isLoading = true, matchItemList = emptyList()),
-                MatchesUiState(isLoading = false, matchItemList = emptyList()),
+                MatchesUiState(isLoading = false, categories = emptyList()),
+                MatchesUiState(isLoading = true, categories = emptyList()),
+                MatchesUiState(isLoading = false, categories = emptyList()),
                 MatchesUiState(
                     isLoading = false,
-                    matchItemList = listOf(
-                        MatchItemUI(
+                    categories = listOf(
+                        AnimalCategoryItemUI(
                             id = 0,
                             name = "name",
                             homeTeam = TeamUI("TeamA", "urlA"),
@@ -125,17 +125,17 @@ class MatchesViewModelTest {
     fun `GIVEN matchesRepository returns ServerError WHEN onRetryGetUpcomingMatches is called THEN ShowError event should be emitted`() =
         collector.runBlockingTest { _, events ->
             //GIVEN
-            coEvery { matchesRepository.getUpcomingMatches() } returns GetUpcomingMatchesResponse.ServerError
+            coEvery { animalRepository.getCategories() } returns GetCategoriesResponse.ServerError
 
             //WHEN
-            viewModel.onRetryGetUpcomingMatches()
+            viewModel.onRetryGetCategories()
 
             //THEN
             val expected = MatchesEvent.ShowError(
                 title = R.string.dialog_server_error_title,
                 message = R.string.dialog_server_error_body,
                 buttonText = R.string.dialog_server_error_retry,
-                action = viewModel::onRetryGetUpcomingMatches
+                action = viewModel::onRetryGetCategories
             )
             assertThat(events[0]).isEqualTo(expected)
         }
@@ -144,17 +144,17 @@ class MatchesViewModelTest {
     fun `GIVEN matchesRepository returns NoInternet WHEN onRetryGetUpcomingMatches is called THEN ShowError event should be emitted`() =
         collector.runBlockingTest { _, events ->
             //GIVEN
-            coEvery { matchesRepository.getUpcomingMatches() } returns GetUpcomingMatchesResponse.NoInternet
+            coEvery { animalRepository.getCategories() } returns GetCategoriesResponse.NoInternet
 
             //WHEN
-            viewModel.onRetryGetUpcomingMatches()
+            viewModel.onRetryGetCategories()
 
             //THEN
             val expected = MatchesEvent.ShowError(
                 title = R.string.dialog_no_internet_title,
                 message = R.string.dialog_no_internet_body,
                 buttonText = R.string.dialog_no_internet_retry,
-                action = viewModel::onRetryGetUpcomingMatches
+                action = viewModel::onRetryGetCategories
             )
             assertThat(events[0]).isEqualTo(expected)
         }
@@ -164,34 +164,34 @@ class MatchesViewModelTest {
     fun `GIVEN matchesRepository returns Success WHEN onRetryGetUpcomingMatches is called THEN state should be updated`() =
         collector.runBlockingTest { states, _ ->
             //GIVEN
-            val result = GetUpcomingMatchesResponse.Success(
-                Matches(
+            val result = GetCategoriesResponse.Success(
+                AnimalCategories(
                     listOf(
-                        Matches.Match(
+                        AnimalCategories.Match(
                             id = 0,
                             name = "name",
-                            homeTeam = Matches.Team("TeamA", "urlA"),
-                            awayTeam = Matches.Team("TeamB", "urlB"),
+                            homeTeam = AnimalCategories.Team("TeamA", "urlA"),
+                            awayTeam = AnimalCategories.Team("TeamB", "urlB"),
                             startTime = "2023-01-11T11:00:00.000000Z",
                         )
                     )
                 )
             )
-            coEvery { matchesRepository.getUpcomingMatches() } returns result
+            coEvery { animalRepository.getCategories() } returns result
 
             every { dateFormatter.formatOnlyHourIfToday("2023-01-11T11:00:00.000000Z") } returns "11:00"
 
             //WHEN
-            viewModel.onRetryGetUpcomingMatches()
+            viewModel.onRetryGetCategories()
 
             val expectedStates = listOf(
-                MatchesUiState(isLoading = false, matchItemList = emptyList()),
-                MatchesUiState(isLoading = true, matchItemList = emptyList()),
-                MatchesUiState(isLoading = false, matchItemList = emptyList()),
+                MatchesUiState(isLoading = false, categories = emptyList()),
+                MatchesUiState(isLoading = true, categories = emptyList()),
+                MatchesUiState(isLoading = false, categories = emptyList()),
                 MatchesUiState(
                     isLoading = false,
-                    matchItemList = listOf(
-                        MatchItemUI(
+                    categories = listOf(
+                        AnimalCategoryItemUI(
                             id = 0,
                             name = "name",
                             homeTeam = TeamUI("TeamA", "urlA"),
@@ -211,7 +211,7 @@ class MatchesViewModelTest {
         collector.runBlockingTest { _, events ->
 
             //GIVEN
-            val matchItem = MatchItemUI(
+            val matchItem = AnimalCategoryItemUI(
                 id = 0,
                 name = "name",
                 homeTeam = TeamUI("TeamA", "urlA"),

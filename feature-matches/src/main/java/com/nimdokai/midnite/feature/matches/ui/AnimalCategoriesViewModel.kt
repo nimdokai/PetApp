@@ -4,9 +4,8 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nimdokai.core_util.AppCoroutineDispatchers
-import com.nimdokai.core_util.navigation.date.DateFormatter
-import com.nimdokai.midnite.core.data.GetUpcomingMatchesResponse
-import com.nimdokai.midnite.core.data.MatchesRepository
+import com.nimdokai.midnite.core.data.AnimalRepository
+import com.nimdokai.midnite.core.data.GetCategoriesResponse
 import com.nimdokai.midnite.core.resources.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -17,10 +16,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MatchesViewModel @Inject constructor(
-    private val matchesRepository: MatchesRepository,
+class AnimalCategoriesViewModel @Inject constructor(
+    private val animalRepository: AnimalRepository,
     private val dispatchers: AppCoroutineDispatchers,
-    private val dateFormatter: DateFormatter
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(MatchesUiState())
@@ -31,61 +29,53 @@ class MatchesViewModel @Inject constructor(
 
     fun onFirstLaunch() {
         // screen view analytics here
-        getUpcomingMatches()
+        getCategories()
     }
 
-    fun onRetryGetUpcomingMatches() {
-        getUpcomingMatches()
+    fun onRetryGetCategories() {
+        getCategories()
     }
 
-    fun onMatchClicked(matchItem: MatchItemUI) = viewModelScope.launch(dispatchers.computation) {
-        _event.emit(MatchesEvent.NavigateToMatchDetails(matchItem.id))
-    }
+    fun onMatchClicked(matchItem: AnimalCategoryItemUI) =
+        viewModelScope.launch(dispatchers.computation) {
+            _event.emit(MatchesEvent.NavigateToMatchDetails(matchItem.id))
+        }
 
-    private fun getUpcomingMatches() = viewModelScope.launch(dispatchers.io) {
+    private fun getCategories() = viewModelScope.launch(dispatchers.io) {
         _state.update { it.copy(isLoading = true) }
-        val response = matchesRepository.getUpcomingMatches()
+        val response = animalRepository.getCategories()
         _state.update { it.copy(isLoading = false) }
         when (response) {
-            is GetUpcomingMatchesResponse.Success -> onUpcomingMatchesResponseSuccess(response)
-            GetUpcomingMatchesResponse.NoInternet -> _event.emit(
+            is GetCategoriesResponse.Success -> onResponseSuccess(response)
+            GetCategoriesResponse.NoInternet -> _event.emit(
                 MatchesEvent.ShowError(
                     title = R.string.dialog_no_internet_title,
                     message = R.string.dialog_no_internet_body,
                     buttonText = R.string.dialog_no_internet_retry,
-                    ::onRetryGetUpcomingMatches
+                    ::onRetryGetCategories
                 )
             )
-            GetUpcomingMatchesResponse.ServerError -> _event.emit(
+            GetCategoriesResponse.ServerError -> _event.emit(
                 MatchesEvent.ShowError(
                     title = R.string.dialog_server_error_title,
                     message = R.string.dialog_server_error_body,
                     buttonText = R.string.dialog_server_error_retry,
-                    ::onRetryGetUpcomingMatches
+                    ::onRetryGetCategories
                 )
             )
 
         }
     }
 
-    private fun onUpcomingMatchesResponseSuccess(response: GetUpcomingMatchesResponse.Success) {
-        val matchesUI = response.matches.data.map {
-            MatchItemUI(
-                id = it.id,
-                name = it.name,
-                homeTeam = it.homeTeam.toUI(),
-                awayTeam = it.awayTeam.toUI(),
-                startTime = dateFormatter.formatOnlyHourIfToday(it.startTime)
-            )
-        }
-        _state.update { it.copy(matchItemList = matchesUI) }
+    private fun onResponseSuccess(response: GetCategoriesResponse.Success) {
+        val categories = response.categories.map { it.toUI() }
+        _state.update { it.copy(categories = categories) }
     }
-
 }
 
 data class MatchesUiState(
     val isLoading: Boolean = false,
-    val matchItemList: List<MatchItemUI> = listOf(),
+    val categories: List<AnimalCategoryItemUI> = listOf(),
 )
 
 sealed interface MatchesEvent {

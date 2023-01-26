@@ -10,7 +10,7 @@ import com.nimdokai.midnite.feature.matches.databinding.ItemMatchBinding
 
 internal class MatchesAdapter(
     private val matchClickedListener: ViewHolder.OnMatchClickedListener
-) : ListAdapter<MatchItemUI, MatchesAdapter.ViewHolder>(MatchItemDiffUtil) {
+) : ListAdapter<AnimalCategoryItemUI, MatchesAdapter.ViewHolder>(MatchItemDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemMatchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -25,35 +25,30 @@ internal class MatchesAdapter(
         private val binding: ItemMatchBinding,
         private val onMatchClickedListener: OnMatchClickedListener
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: MatchItemUI) {
+        fun bind(item: AnimalCategoryItemUI) {
             binding.apply {
-                startTime.text = item.startTime
-                homeTeam.text = item.homeTeam.name
-                homeTeamImage.loadTeamImage(item.homeTeam.imageUrl)
-                awayTeam.text = item.awayTeam.name
-                awayTeamImage.loadTeamImage(item.awayTeam.imageUrl)
+                categoryTitle.text = item.name
                 root.setOnClickListener { onMatchClickedListener.onClicked(item) }
             }
         }
 
-
         fun interface OnMatchClickedListener {
-            fun onClicked(MatchItem: MatchItemUI)
+            fun onClicked(MatchItem: AnimalCategoryItemUI)
         }
     }
 
-    private object MatchItemDiffUtil : DiffUtil.ItemCallback<MatchItemUI>() {
+    private object MatchItemDiffUtil : DiffUtil.ItemCallback<AnimalCategoryItemUI>() {
 
         override fun areItemsTheSame(
-            oldItem: MatchItemUI,
-            newItem: MatchItemUI,
+            oldItem: AnimalCategoryItemUI,
+            newItem: AnimalCategoryItemUI,
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: MatchItemUI,
-            newItem: MatchItemUI,
+            oldItem: AnimalCategoryItemUI,
+            newItem: AnimalCategoryItemUI,
         ): Boolean {
             return oldItem == newItem
         }

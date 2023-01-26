@@ -8,7 +8,7 @@ import com.nimdokai.core_util.AppCoroutineDispatchers
 import com.nimdokai.core_util.navigation.date.DateFormatter
 import com.nimdokai.feature_matchdetails.navigation.MatchDetailsNavigatorDefault
 import com.nimdokai.midnite.core.data.GetMatchDetailsResponse.*
-import com.nimdokai.midnite.core.data.MatchesRepository
+import com.nimdokai.midnite.core.data.AnimalRepository
 import com.nimdokai.midnite.core.resources.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MatchDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val matchesRepository: MatchesRepository,
+    private val animalRepository: AnimalRepository,
     private val dispatchers: AppCoroutineDispatchers,
     private val dateFormatter: DateFormatter
 ) : ViewModel() {
@@ -46,7 +46,7 @@ class MatchDetailsViewModel @Inject constructor(
 
     private fun getMatchDetails() = viewModelScope.launch(dispatchers.io) {
         _state.update { it.copy(isLoading = true) }
-        val response = matchesRepository.getMatchDetails(args.matchId)
+        val response = animalRepository.getAnimalDetails(args.matchId)
         _state.update { it.copy(isLoading = false) }
         when (response) {
             is Success -> onGetMatchDetailsResponseSuccess(response)
@@ -71,7 +71,7 @@ class MatchDetailsViewModel @Inject constructor(
     }
 
     private fun onGetMatchDetailsResponseSuccess(response: Success) {
-        _state.update { it.copy(matchDetailsUI = response.matchDetails.mapToUI(dateFormatter)) }
+        _state.update { it.copy(matchDetailsUI = response.animalDetails.mapToUI(dateFormatter)) }
     }
 }
 
