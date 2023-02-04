@@ -3,7 +3,7 @@ package com.nimdokai.core_util.di
 import com.nimdokai.core_util.BuildConfigWrapper
 import com.nimdokai.core_util.Configurable
 import com.nimdokai.core_util.navigation.date.DateFormatter
-import com.nimdokai.core_util.navigation.date.DefaultDateFormatter
+import com.nimdokai.core_util.navigation.date.DateFormatterDefault
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -19,7 +19,7 @@ object CoreModule {
     @Provides
     @Singleton
     fun provideDateFormatter(): DateFormatter {
-        return DefaultDateFormatter
+        return DateFormatterDefault
     }
 
 }

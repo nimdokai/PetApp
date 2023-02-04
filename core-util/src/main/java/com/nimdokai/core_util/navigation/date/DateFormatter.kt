@@ -1,6 +1,7 @@
 package com.nimdokai.core_util.navigation.date
 
 import android.annotation.SuppressLint
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -8,24 +9,25 @@ interface DateFormatter {
     fun formatOnlyHourIfToday(date: String): String
 }
 
-internal object DefaultDateFormatter : DateFormatter {
-
+internal object DateFormatterDefault : DateFormatter {
     @SuppressLint("SimpleDateFormat")
     override fun formatOnlyHourIfToday(date: String): String {
-        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
-        @Suppress("NAME_SHADOWING")
-        val date: Date = format.parse(date) ?: return date
+        val parsedDate = try {
+            val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+            format.parse(date)
+        } catch (e: ParseException) {
+            return date
+        }
 
         val calendar = Calendar.getInstance()
-        calendar.time = date
+        calendar.time = parsedDate
 
-        return if (isToday(calendar)) {
-            val timeFormat = SimpleDateFormat("HH:mm")
-            return timeFormat.format(date)
+        val timeFormat = if (isToday(calendar)) {
+            SimpleDateFormat("HH:mm")
         } else {
-            val timeFormat = SimpleDateFormat("dd-MM-yyyy HH:mm")
-            return timeFormat.format(date)
+            SimpleDateFormat("dd-MM-yyyy HH:mm")
         }
+        return timeFormat.format(parsedDate)
     }
 
     private fun isToday(
