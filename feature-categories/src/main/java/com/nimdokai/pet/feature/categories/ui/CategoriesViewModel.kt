@@ -5,7 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nimdokai.core_util.AppCoroutineDispatchers
 import com.nimdokai.pet.core.data.PetRepository
-import com.nimdokai.pet.core.data.GetCategoriesResponse
+import com.nimdokai.pet.core.data.DataResponse.*
+import com.nimdokai.pet.core.data.model.PetCategory
 import com.nimdokai.pet.core.resources.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -46,8 +47,8 @@ class PetCategoriesViewModel @Inject constructor(
         val response = petRepository.getCategories()
         _state.update { it.copy(isLoading = false) }
         when (response) {
-            is GetCategoriesResponse.Success -> onResponseSuccess(response)
-            GetCategoriesResponse.NoInternet -> _event.emit(
+            is Success -> onResponseSuccess(response)
+            NoInternet -> _event.emit(
                 CategoriesEvent.ShowError(
                     title = R.string.dialog_no_internet_title,
                     message = R.string.dialog_no_internet_body,
@@ -55,7 +56,7 @@ class PetCategoriesViewModel @Inject constructor(
                     ::onRetryGetCategories
                 )
             )
-            GetCategoriesResponse.ServerError -> _event.emit(
+            ServerError -> _event.emit(
                 CategoriesEvent.ShowError(
                     title = R.string.dialog_server_error_title,
                     message = R.string.dialog_server_error_body,
@@ -67,8 +68,8 @@ class PetCategoriesViewModel @Inject constructor(
         }
     }
 
-    private fun onResponseSuccess(response: GetCategoriesResponse.Success) {
-        val categories = response.categories.map { it.toUI() }
+    private fun onResponseSuccess(response: Success<out List<PetCategory>>) {
+        val categories = response.data.map { it.toUI() }
         _state.update { it.copy(categories = categories) }
     }
 }

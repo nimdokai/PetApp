@@ -1,3 +1,4 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -17,12 +18,14 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "com.nimdokai.pet.core.testing.HiltTestRunner"
+        @Suppress("UnstableApiUsage")
         vectorDrawables {
             useSupportLibrary = true
         }
     }
 
     buildTypes {
+        @Suppress("UnstableApiUsage")
         getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
@@ -41,6 +44,7 @@ android {
         jvmTarget = "1.8"
     }
 
+    @Suppress("UnstableApiUsage")
     buildFeatures {
         viewBinding = true
     }

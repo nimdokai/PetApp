@@ -1,6 +1,6 @@
 package com.nimdokai.pet.feature.categories.ui
 
-import com.nimdokai.pet.core.data.model.PetCategoryResponse
+import com.nimdokai.pet.core.data.model.PetCategory
 
 data class PetCategoryItemUI(
     val id: Int,
@@ -12,4 +12,4 @@ data class TeamUI(
     val imageUrl: String
 )
 
-internal fun PetCategoryResponse.toUI() = PetCategoryItemUI(id, name)
+internal fun PetCategory.toUI() = PetCategoryItemUI(id, name)

@@ -1,3 +1,4 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -10,7 +11,6 @@ android {
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 33
 
         testInstrumentationRunner = "com.nimdokai.pet.core.testing.HiltTestRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -27,6 +27,7 @@ android {
 
 dependencies {
     implementation(project(":core-util"))
+    implementation(project(":core-network"))
 
     // Arch Components
     implementation(libs.hilt.android)
@@ -34,7 +35,6 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.retrofit)
-    implementation(libs.retrofit.gson.converter)
 
     // Local tests: jUnit, coroutines, Android runner
     testImplementation(libs.junit)

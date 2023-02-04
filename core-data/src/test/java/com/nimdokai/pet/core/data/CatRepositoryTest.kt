@@ -2,8 +2,9 @@
 
 package com.nimdokai.pet.core.data
 
-import com.nimdokai.pet.core.data.api.PetApi
-import com.nimdokai.pet.core.data.model.PetCategoryJson
+import com.nimdokai.pet.core.data.model.PetCategory
+import com.nimdokai.pet.core_network.api.PetApi
+import com.nimdokai.pet.core_network.model.PetCategoryJson
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody
@@ -34,7 +35,7 @@ class CatRepositoryTest {
 
             //THEN
 
-            Assert.assertEquals(GetCategoriesResponse.Success(emptyList()), categories)
+            Assert.assertEquals(DataResponse.Success<List<PetCategory>>(emptyList()), categories)
         }
 
     @Test
@@ -48,7 +49,7 @@ class CatRepositoryTest {
 
             //THEN
 
-            Assert.assertEquals(GetCategoriesResponse.ServerError, categories)
+            Assert.assertEquals(DataResponse.ServerError, categories)
         }
 
     @Test
@@ -62,7 +63,7 @@ class CatRepositoryTest {
 
             //THEN
 
-            Assert.assertEquals(GetCategoriesResponse.ServerError, categories)
+            Assert.assertEquals(DataResponse.ServerError, categories)
         }
 
     @Test
@@ -76,7 +77,7 @@ class CatRepositoryTest {
 
             //THEN
 
-            Assert.assertEquals(GetCategoriesResponse.NoInternet, categories)
+            Assert.assertEquals(DataResponse.NoInternet, categories)
         }
 }
 

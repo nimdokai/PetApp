@@ -22,6 +22,7 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
+    @Suppress("UnstableApiUsage")
     repositories {
         google()
         mavenCentral()
@@ -36,3 +37,5 @@ include(":core-resources")
 include(":feature-categories")
 include(":core-util")
 include(":feature-petdetails")
+include(":core-domain")
+include(":core-network")

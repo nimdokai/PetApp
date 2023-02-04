@@ -1,6 +1,6 @@
 package com.nimdokai.pet.core.data.model
 
-data class PetCategoryResponse(
+data class PetCategory(
     val id: Int,
     val name: String
 )

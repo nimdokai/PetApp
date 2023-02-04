@@ -5,10 +5,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nimdokai.core_util.AppCoroutineDispatchers
-import com.nimdokai.core_util.navigation.date.DateFormatter
 import com.nimdokai.feature_petdetails.navigation.PetDetailsNavigatorDefault
-import com.nimdokai.pet.core.data.GetPetDetailsResponse.*
+import com.nimdokai.pet.core.data.DataResponse.*
 import com.nimdokai.pet.core.data.PetRepository
+import com.nimdokai.pet.core.data.model.PetDetails
 import com.nimdokai.pet.core.resources.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +23,6 @@ class PetDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val petRepository: PetRepository,
     private val dispatchers: AppCoroutineDispatchers,
-    private val dateFormatter: DateFormatter
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(PetDetailsUiState())
@@ -70,7 +69,7 @@ class PetDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun onGetPetDetailsResponseSuccess(response: Success) {
+    private fun onGetPetDetailsResponseSuccess(response: Success<out PetDetails>) {
         _state.update { it.copy(petDetailsUiModel = TODO()) }
     }
 }

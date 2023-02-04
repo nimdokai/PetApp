@@ -1,4 +1,4 @@
-package com.nimdokai.pet.core.data.model
+package com.nimdokai.pet.core_network.model
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,3 +1,4 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -12,16 +13,16 @@ android {
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 33
 
         testInstrumentationRunner = "com.nimdokai.pet.core.testing.HiltTestRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
+    @Suppress("UnstableApiUsage")
     buildFeatures {
         viewBinding = true
     }
-
+    @Suppress("UnstableApiUsage")
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
     }

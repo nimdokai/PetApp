@@ -1,4 +1,4 @@
-package com.nimdokai.pet.core.data
+package com.nimdokai.pet.core_network
 
 object ApiConstants {
 

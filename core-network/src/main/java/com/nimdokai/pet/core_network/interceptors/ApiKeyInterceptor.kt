@@ -1,4 +1,4 @@
-package com.nimdokai.pet.core.data.interceptors
+package com.nimdokai.pet.core_network.interceptors
 
 import com.nimdokai.core_util.Configurable
 import okhttp3.Interceptor
