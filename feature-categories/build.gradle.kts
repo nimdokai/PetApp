@@ -42,7 +42,7 @@ android {
 dependencies {
     implementation(project(":core-resources"))
     implementation(project(":core-util"))
-    implementation(project(":core-data"))
+    implementation(project(":core-domain"))
     androidTestImplementation(project(":core-testing"))
     testImplementation(project(":core-testing"))
 

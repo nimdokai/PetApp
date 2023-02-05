@@ -2,7 +2,7 @@
 
 package com.nimdokai.pet.core.data
 
-import com.nimdokai.pet.core.data.model.PetCategory
+import com.nimdokai.pet.core.data.model.PetCategoryResponse
 import com.nimdokai.pet.core_network.api.PetApi
 import com.nimdokai.pet.core_network.model.PetCategoryJson
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,7 +35,7 @@ class CatRepositoryTest {
 
             //THEN
 
-            Assert.assertEquals(DataResponse.Success<List<PetCategory>>(emptyList()), categories)
+            Assert.assertEquals(DataResponse.Success<List<PetCategoryResponse>>(emptyList()), categories)
         }
 
     @Test

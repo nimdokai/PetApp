@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.nimdokai.pet.feature.categories.databinding.ItemCategoryBinding
 
 internal class CategoriesAdapter(
@@ -28,6 +29,7 @@ internal class CategoriesAdapter(
         fun bind(item: PetCategoryItemUI) {
             binding.apply {
                 categoryTitle.text = item.name
+                categoryImage.load(item.imageUrl)
                 root.setOnClickListener { onCategoryClickedListener.onClicked(item) }
             }
         }

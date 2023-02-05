@@ -38,7 +38,7 @@ android {
 dependencies {
 
     implementation(project(":core-util"))
-    implementation(project(":core-network"))
+    implementation(project(":core-data"))
 
     // Arch Components
     implementation(libs.hilt.android)

@@ -6,7 +6,7 @@ import com.nimdokai.core_util.navigation.date.DateFormatter
 import com.nimdokai.feature_petdetails.navigation.PetDetailsNavigatorDefault.PetDetailsArgs
 import com.nimdokai.pet.core.data.GetPetDetailsResponse
 import com.nimdokai.pet.core.data.PetRepository
-import com.nimdokai.pet.core.data.model.PetDetails
+import com.nimdokai.pet.core.data.model.PetDetailsResponse
 import com.nimdokai.pet.core.resources.R
 import com.nimdokai.pet.core.testing.TestCoroutineDispatchers
 import com.nimdokai.pet.core.testing.ViewModelFlowCollector
@@ -86,16 +86,16 @@ class PetDetailsViewModelTest {
         collector.runBlockingTest { states, _ ->
             //GIVEN
             val result = GetPetDetailsResponse.Success(
-                PetDetails(
+                PetDetailsResponse(
                     id = 0,
                     name = "name",
-                    homeTeam = PetDetails.Team("TeamA", "urlA"),
-                    awayTeam = PetDetails.Team("TeamB", "urlB"),
+                    homeTeam = PetDetailsResponse.Team("TeamA", "urlA"),
+                    awayTeam = PetDetailsResponse.Team("TeamB", "urlB"),
                     startTime = "2023-01-11T11:00:00.000000Z",
                     markets = listOf(
-                        PetDetails.Market(
+                        PetDetailsResponse.Market(
                             id = 1, "market1", listOf(
-                                PetDetails.Contract(2, "contract1", "1.23")
+                                PetDetailsResponse.Contract(2, "contract1", "1.23")
                             )
                         ),
                     )
@@ -177,16 +177,16 @@ class PetDetailsViewModelTest {
         collector.runBlockingTest { states, _ ->
             //GIVEN
             val result = GetPetDetailsResponse.Success(
-                PetDetails(
+                PetDetailsResponse(
                     id = 0,
                     name = "name",
-                    homeTeam = PetDetails.Team("TeamA", "urlA"),
-                    awayTeam = PetDetails.Team("TeamB", "urlB"),
+                    homeTeam = PetDetailsResponse.Team("TeamA", "urlA"),
+                    awayTeam = PetDetailsResponse.Team("TeamB", "urlB"),
                     startTime = "2023-01-11T11:00:00.000000Z",
                     markets = listOf(
-                        PetDetails.Market(
+                        PetDetailsResponse.Market(
                             id = 1, "market1", listOf(
-                                PetDetails.Contract(2, "contract1", "1.23")
+                                PetDetailsResponse.Contract(2, "contract1", "1.23")
                             )
                         ),
                     )

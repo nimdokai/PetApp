@@ -8,7 +8,7 @@ import com.nimdokai.core_util.AppCoroutineDispatchers
 import com.nimdokai.feature_petdetails.navigation.PetDetailsNavigatorDefault
 import com.nimdokai.pet.core.data.DataResponse.*
 import com.nimdokai.pet.core.data.PetRepository
-import com.nimdokai.pet.core.data.model.PetDetails
+import com.nimdokai.pet.core.data.model.PetDetailsResponse
 import com.nimdokai.pet.core.resources.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -69,7 +69,7 @@ class PetDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun onGetPetDetailsResponseSuccess(response: Success<out PetDetails>) {
+    private fun onGetPetDetailsResponseSuccess(response: Success<out PetDetailsResponse>) {
         _state.update { it.copy(petDetailsUiModel = TODO()) }
     }
 }

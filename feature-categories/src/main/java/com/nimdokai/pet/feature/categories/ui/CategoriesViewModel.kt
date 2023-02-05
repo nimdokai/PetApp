@@ -4,10 +4,9 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nimdokai.core_util.AppCoroutineDispatchers
-import com.nimdokai.pet.core.data.PetRepository
-import com.nimdokai.pet.core.data.DataResponse.*
-import com.nimdokai.pet.core.data.model.PetCategory
 import com.nimdokai.pet.core.resources.R
+import com.nimdokai.pet.core_domain.DomainResult.*
+import com.nimdokai.pet.core_domain.GetCatCategoriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PetCategoriesViewModel @Inject constructor(
-    private val petRepository: PetRepository,
+    private val getCatCategoriesUseCase: GetCatCategoriesUseCase,
     private val dispatchers: AppCoroutineDispatchers,
 ) : ViewModel() {
 
@@ -44,10 +43,13 @@ class PetCategoriesViewModel @Inject constructor(
 
     private fun getCategories() = viewModelScope.launch(dispatchers.io) {
         _state.update { it.copy(isLoading = true) }
-        val response = petRepository.getCategories()
+        val result = getCatCategoriesUseCase()
         _state.update { it.copy(isLoading = false) }
-        when (response) {
-            is Success -> onResponseSuccess(response)
+        when (result) {
+            is Success -> {
+                val categories = result.data.map { it.toUI() }
+                _state.update { it.copy(categories = categories) }
+            }
             NoInternet -> _event.emit(
                 CategoriesEvent.ShowError(
                     title = R.string.dialog_no_internet_title,
@@ -68,10 +70,6 @@ class PetCategoriesViewModel @Inject constructor(
         }
     }
 
-    private fun onResponseSuccess(response: Success<out List<PetCategory>>) {
-        val categories = response.data.map { it.toUI() }
-        _state.update { it.copy(categories = categories) }
-    }
 }
 
 data class CategoriesUiState(
