@@ -16,12 +16,6 @@ interface PetRepository {
     suspend fun getPetImages(categoryID: String): DataResponse<out List<PetImageResponse>>
 }
 
-sealed interface DataResponse<Data> {
-    data class Success<Data>(val data: Data) : DataResponse<Data>
-    object NoInternet : DataResponse<Nothing>
-    object ServerError : DataResponse<Nothing>
-}
-
 class CatRepository @Inject constructor(
     private val petApi: PetApi
 ) : PetRepository {
