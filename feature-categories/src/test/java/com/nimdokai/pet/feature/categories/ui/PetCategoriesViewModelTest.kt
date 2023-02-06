@@ -1,48 +1,49 @@
 package com.nimdokai.pet.feature.categories.ui
 
 import com.google.common.truth.Truth.assertThat
-import com.nimdokai.core_util.navigation.date.DateFormatter
-import com.nimdokai.pet.core.data.GetCategoriesResponse
-import com.nimdokai.pet.core.data.PetRepository
-import com.nimdokai.pet.core.data.model.PetCategories
 import com.nimdokai.pet.core.resources.R
 import com.nimdokai.pet.core.testing.TestCoroutineDispatchers
 import com.nimdokai.pet.core.testing.ViewModelFlowCollector
-import io.mockk.coEvery
-import io.mockk.every
-import io.mockk.mockk
+import com.nimdokai.pet.core.testing.fakes.FakeGetPetCategoriesUseCase
+import com.nimdokai.pet.core_domain.DomainResult
+import com.nimdokai.pet.core_domain.model.PetCategory
+import com.nimdokai.pet.feature.categories.list.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PetCategoriesViewModelTest {
 
-    private val petRepository: PetRepository = mockk()
-    private val dateFormatter: DateFormatter = mockk()
+    private lateinit var getPetCategoriesUseCase: FakeGetPetCategoriesUseCase
 
     private lateinit var viewModel: PetCategoriesViewModel
     private lateinit var collector: ViewModelFlowCollector<CategoriesUiState, CategoriesEvent>
 
     @Before
     fun setUp() {
+
+        getPetCategoriesUseCase = FakeGetPetCategoriesUseCase()
+
         viewModel = PetCategoriesViewModel(
-            petRepository,
+            getPetCategoriesUseCase,
             TestCoroutineDispatchers,
-            dateFormatter,
         )
 
         collector = ViewModelFlowCollector(viewModel.state, viewModel.event)
     }
 
     @Test
-    fun `GIVEN matchesRepository returns ServerError WHEN onFirstLaunch is called THEN ShowError event should be emitted`() =
-        collector.runBlockingTest { _, events ->
+    fun `GIVEN getPetCategoriesUseCase returns ServerError WHEN onFirstLaunch is called THEN ShowError event should be emitted`() =
+        collector.runTest { _, events ->
             //GIVEN
-            coEvery { petRepository.getCategories() } returns GetCategoriesResponse.ServerError
+            getPetCategoriesUseCase.domainResult = flowOf(DomainResult.ServerError)
 
             //WHEN
             viewModel.onFirstLaunch()
+            delay(5000)
 
             //THEN
             val expected = CategoriesEvent.ShowError(
@@ -55,14 +56,15 @@ class PetCategoriesViewModelTest {
         }
 
     @Test
-    fun `GIVEN matchesRepository returns NoInternet WHEN onFirstLaunch is called THEN ShowError event should be emitted`() =
-        collector.runBlockingTest { _, events ->
+    fun `GIVEN getPetCategoriesUseCase returns NoInternet WHEN onFirstLaunch is called THEN ShowError event should be emitted`() =
+        collector.runTest { _, events ->
             //GIVEN
-            coEvery { petRepository.getCategories() } returns GetCategoriesResponse.NoInternet
+            getPetCategoriesUseCase.domainResult = flowOf(DomainResult.NoInternet)
 
 
             //WHEN
             viewModel.onFirstLaunch()
+            delay(5000)
 
             //THEN
             val expected = CategoriesEvent.ShowError(
@@ -76,42 +78,34 @@ class PetCategoriesViewModelTest {
 
 
     @Test
-    fun `GIVEN matchesRepository returns Success WHEN onFirstLaunch is called THEN state should be updated`() =
-        collector.runBlockingTest { states, _ ->
+    fun `GIVEN getPetCategoriesUseCase returns Success WHEN onFirstLaunch is called THEN state should be updated`() =
+        collector.runTest { states, _ ->
             //GIVEN
-            val result = GetCategoriesResponse.Success(
-                PetCategories(
-                    listOf(
-                        PetCategories.Match(
-                            id = 0,
-                            name = "name",
-                            homeTeam = PetCategories.Team("TeamA", "urlA"),
-                            awayTeam = PetCategories.Team("TeamB", "urlB"),
-                            startTime = "2023-01-11T11:00:00.000000Z",
-                        )
+            val result = DomainResult.Success(
+                listOf(
+                    PetCategory(
+                        id = 0,
+                        name = "name",
+                        imageUrl = "imageUrl"
                     )
                 )
             )
-            coEvery { petRepository.getCategories() } returns result
-
-            every { dateFormatter.formatOnlyHourIfToday("2023-01-11T11:00:00.000000Z") } returns "11:00"
+            getPetCategoriesUseCase.domainResult = flowOf(result)
 
             //WHEN
             viewModel.onFirstLaunch()
+            delay(5000)
 
             val expectedStates = listOf(
                 CategoriesUiState(isLoading = false, categories = emptyList()),
                 CategoriesUiState(isLoading = true, categories = emptyList()),
-                CategoriesUiState(isLoading = false, categories = emptyList()),
                 CategoriesUiState(
                     isLoading = false,
                     categories = listOf(
                         PetCategoryItemUI(
                             id = 0,
                             name = "name",
-                            homeTeam = TeamUI("TeamA", "urlA"),
-                            awayTeam = TeamUI("TeamB", "urlB"),
-                            startTime = "11:00",
+                            imageUrl = "imageUrl"
                         )
                     )
                 ),
@@ -122,13 +116,14 @@ class PetCategoriesViewModelTest {
         }
 
     @Test
-    fun `GIVEN matchesRepository returns ServerError WHEN onRetryGetUpcomingMatches is called THEN ShowError event should be emitted`() =
-        collector.runBlockingTest { _, events ->
+    fun `GIVEN getPetCategoriesUseCase returns ServerError WHEN onRetryGetCategories is called THEN ShowError event should be emitted`() =
+        collector.runTest { _, events ->
             //GIVEN
-            coEvery { petRepository.getCategories() } returns GetCategoriesResponse.ServerError
+            getPetCategoriesUseCase.domainResult = flowOf(DomainResult.ServerError)
 
             //WHEN
             viewModel.onRetryGetCategories()
+            delay(5000)
 
             //THEN
             val expected = CategoriesEvent.ShowError(
@@ -141,13 +136,14 @@ class PetCategoriesViewModelTest {
         }
 
     @Test
-    fun `GIVEN matchesRepository returns NoInternet WHEN onRetryGetUpcomingMatches is called THEN ShowError event should be emitted`() =
-        collector.runBlockingTest { _, events ->
+    fun `GIVEN getPetCategoriesUseCase returns NoInternet WHEN onRetryGetCategories is called THEN ShowError event should be emitted`() =
+        collector.runTest { _, events ->
             //GIVEN
-            coEvery { petRepository.getCategories() } returns GetCategoriesResponse.NoInternet
+            getPetCategoriesUseCase.domainResult = flowOf(DomainResult.NoInternet)
 
             //WHEN
             viewModel.onRetryGetCategories()
+            delay(5000)
 
             //THEN
             val expected = CategoriesEvent.ShowError(
@@ -161,42 +157,34 @@ class PetCategoriesViewModelTest {
 
 
     @Test
-    fun `GIVEN matchesRepository returns Success WHEN onRetryGetUpcomingMatches is called THEN state should be updated`() =
-        collector.runBlockingTest { states, _ ->
+    fun `GIVEN getPetCategoriesUseCase returns Success WHEN onRetryGetCategories is called THEN state should be updated`() =
+        collector.runTest { states, _ ->
             //GIVEN
-            val result = GetCategoriesResponse.Success(
-                PetCategories(
-                    listOf(
-                        PetCategories.Match(
-                            id = 0,
-                            name = "name",
-                            homeTeam = PetCategories.Team("TeamA", "urlA"),
-                            awayTeam = PetCategories.Team("TeamB", "urlB"),
-                            startTime = "2023-01-11T11:00:00.000000Z",
-                        )
+            val result = DomainResult.Success(
+                listOf(
+                    PetCategory(
+                        id = 0,
+                        name = "name",
+                        imageUrl = "imageUrl"
                     )
                 )
             )
-            coEvery { petRepository.getCategories() } returns result
-
-            every { dateFormatter.formatOnlyHourIfToday("2023-01-11T11:00:00.000000Z") } returns "11:00"
+            getPetCategoriesUseCase.domainResult = flowOf(result)
 
             //WHEN
             viewModel.onRetryGetCategories()
+            delay(5000)
 
             val expectedStates = listOf(
                 CategoriesUiState(isLoading = false, categories = emptyList()),
                 CategoriesUiState(isLoading = true, categories = emptyList()),
-                CategoriesUiState(isLoading = false, categories = emptyList()),
                 CategoriesUiState(
                     isLoading = false,
                     categories = listOf(
                         PetCategoryItemUI(
                             id = 0,
                             name = "name",
-                            homeTeam = TeamUI("TeamA", "urlA"),
-                            awayTeam = TeamUI("TeamB", "urlB"),
-                            startTime = "11:00",
+                            imageUrl = "imageUrl"
                         )
                     )
                 ),
@@ -204,29 +192,6 @@ class PetCategoriesViewModelTest {
 
             //THEN
             assertThat(states).isEqualTo(expectedStates)
-        }
-
-    @Test
-    fun `WHEN onMatchClicked is called THEN NavigateToMatchDetails event should be emitted`() =
-        collector.runBlockingTest { _, events ->
-
-            //GIVEN
-            val matchItem = PetCategoryItemUI(
-                id = 0,
-                name = "name",
-                homeTeam = TeamUI("TeamA", "urlA"),
-                awayTeam = TeamUI("TeamB", "urlB"),
-                startTime = "11:00",
-            )
-
-            //WHEN
-            viewModel.onPetClicked(
-                matchItem
-            )
-
-            //THEN
-            val expected = CategoriesEvent.NavigateToPetDetails(0)
-            assertThat(events[0]).isEqualTo(expected)
         }
 
 }

@@ -27,6 +27,11 @@ android {
 
 dependencies {
     implementation(project(":core-util"))
+    implementation(project(":core-resources"))
+    implementation(project(":core-util"))
+    implementation(project(":core-domain"))
+    implementation(project(":core-network"))
+    implementation(project(":core-data"))
 
     implementation(libs.androidx.test.runner)
     implementation(libs.kotlinx.coroutines.core)

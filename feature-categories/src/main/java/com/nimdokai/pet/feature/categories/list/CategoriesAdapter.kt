@@ -1,4 +1,4 @@
-package com.nimdokai.pet.feature.categories.ui
+package com.nimdokai.pet.feature.categories.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

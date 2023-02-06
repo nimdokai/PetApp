@@ -1,4 +1,4 @@
-package com.nimdokai.pet.feature.categories.ui
+package com.nimdokai.pet.feature.categories.list
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.nimdokai.core_util.AppCoroutineDispatchers
 import com.nimdokai.pet.core.resources.R
 import com.nimdokai.pet.core_domain.DomainResult.*
-import com.nimdokai.pet.core_domain.GetCatCategoriesUseCase
+import com.nimdokai.pet.core_domain.GetPetCategoriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PetCategoriesViewModel @Inject constructor(
-    private val getCatCategoriesUseCase: GetCatCategoriesUseCase,
+    private val getCatCategoriesUseCase: GetPetCategoriesUseCase,
     private val dispatchers: AppCoroutineDispatchers,
 ) : ViewModel() {
 
@@ -48,28 +48,32 @@ class PetCategoriesViewModel @Inject constructor(
                 when (result) {
                     is Success -> {
                         val categories = result.data.map { it.toUI() }
-                        _state.update { it.copy(categories = categories) }
+                        _state.update { it.copy(isLoading = false, categories = categories) }
                     }
-                    NoInternet -> _event.emit(
-                        CategoriesEvent.ShowError(
-                            title = R.string.dialog_no_internet_title,
-                            message = R.string.dialog_no_internet_body,
-                            buttonText = R.string.dialog_no_internet_retry,
-                            ::onRetryGetCategories
+                    NoInternet -> {
+                        _event.emit(
+                            CategoriesEvent.ShowError(
+                                title = R.string.dialog_no_internet_title,
+                                message = R.string.dialog_no_internet_body,
+                                buttonText = R.string.dialog_no_internet_retry,
+                                ::onRetryGetCategories
+                            )
                         )
-                    )
-                    ServerError -> _event.emit(
-                        CategoriesEvent.ShowError(
-                            title = R.string.dialog_server_error_title,
-                            message = R.string.dialog_server_error_body,
-                            buttonText = R.string.dialog_server_error_retry,
-                            ::onRetryGetCategories
+                        _state.update { it.copy(isLoading = false) }
+                    }
+                    ServerError -> {
+                        _event.emit(
+                            CategoriesEvent.ShowError(
+                                title = R.string.dialog_server_error_title,
+                                message = R.string.dialog_server_error_body,
+                                buttonText = R.string.dialog_server_error_retry,
+                                ::onRetryGetCategories
+                            )
                         )
-                    )
-
+                        _state.update { it.copy(isLoading = false) }
+                    }
                 }
             }
-        _state.update { it.copy(isLoading = false) }
     }
 
 }
