@@ -3,21 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="194dp"
+    android:layout_height="@dimen/item_card_height"
     android:layout_gravity="center"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="4dp">
-
-    <!--    ToDo extract to dimenes values-->
+    android:layout_margin="@dimen/xxs"
+    app:cardCornerRadius="@dimen/xxxs">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/categoryImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toTopOf="@id/categoryTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -27,11 +27,11 @@
             android:id="@+id/categoryTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:padding="8dp"
+            android:background="?colorPrimary"
+            android:padding="@dimen/xxs"
             android:textAlignment="textStart"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textColor="@color/colorOnSecondary"
+            android:textColor="?colorOnSecondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
