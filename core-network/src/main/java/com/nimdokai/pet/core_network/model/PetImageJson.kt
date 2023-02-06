@@ -3,8 +3,6 @@ package com.nimdokai.pet.core_network.model
 import com.google.gson.annotations.SerializedName
 
 data class PetImageJson(
-    @SerializedName("breeds")
-    val breeds: List<Any>,
     @SerializedName("categories")
     val categories: List<Category>,
     @SerializedName("id")

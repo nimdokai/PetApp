@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.test)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.hilt.android.testing)
+    implementation(libs.retrofit)
     implementation(libs.junit)
     implementation(libs.androidx.appcompat)
 

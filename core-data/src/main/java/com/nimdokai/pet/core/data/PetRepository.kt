@@ -30,10 +30,9 @@ class CatRepository @Inject constructor(
 
     override suspend fun getPetImages(categoryID: String): DataResponse<out List<PetImageResponse>> {
         val parameters = mapOf(ParametersKey.CategoryIds.value to categoryID)
-        val response =
-            tryCall({ petApi.getImages(parameters) }) {
-                it.map { petImageJson -> petImageJson.mapToResponse() }
-            }
+        val response = tryCall({ petApi.getImages(parameters) }) {
+            it.map { petImageJson -> petImageJson.mapToResponse() }
+        }
         return response
     }
 

@@ -40,5 +40,6 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.hilt.android.testing)
+    testImplementation(project(":core-testing"))
 
 }
