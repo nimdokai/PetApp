@@ -43,31 +43,33 @@ class PetCategoriesViewModel @Inject constructor(
 
     private fun getCategories() = viewModelScope.launch(dispatchers.io) {
         _state.update { it.copy(isLoading = true) }
-        val result = getCatCategoriesUseCase()
-        _state.update { it.copy(isLoading = false) }
-        when (result) {
-            is Success -> {
-                val categories = result.data.map { it.toUI() }
-                _state.update { it.copy(categories = categories) }
-            }
-            NoInternet -> _event.emit(
-                CategoriesEvent.ShowError(
-                    title = R.string.dialog_no_internet_title,
-                    message = R.string.dialog_no_internet_body,
-                    buttonText = R.string.dialog_no_internet_retry,
-                    ::onRetryGetCategories
-                )
-            )
-            ServerError -> _event.emit(
-                CategoriesEvent.ShowError(
-                    title = R.string.dialog_server_error_title,
-                    message = R.string.dialog_server_error_body,
-                    buttonText = R.string.dialog_server_error_retry,
-                    ::onRetryGetCategories
-                )
-            )
+        getCatCategoriesUseCase()
+            .collect { result ->
+                when (result) {
+                    is Success -> {
+                        val categories = result.data.map { it.toUI() }
+                        _state.update { it.copy(categories = categories) }
+                    }
+                    NoInternet -> _event.emit(
+                        CategoriesEvent.ShowError(
+                            title = R.string.dialog_no_internet_title,
+                            message = R.string.dialog_no_internet_body,
+                            buttonText = R.string.dialog_no_internet_retry,
+                            ::onRetryGetCategories
+                        )
+                    )
+                    ServerError -> _event.emit(
+                        CategoriesEvent.ShowError(
+                            title = R.string.dialog_server_error_title,
+                            message = R.string.dialog_server_error_body,
+                            buttonText = R.string.dialog_server_error_retry,
+                            ::onRetryGetCategories
+                        )
+                    )
 
-        }
+                }
+            }
+        _state.update { it.copy(isLoading = false) }
     }
 
 }

@@ -10,7 +10,7 @@ class ApiKeyInterceptor @Inject constructor(private val configs: Configurable) :
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
             .newBuilder()
-            .addHeader(configs.getCatApiToken(), "x-api-key")
+            .addHeader("x-api-key", configs.getCatApiToken())
             .build()
 
         return chain.proceed(request)
