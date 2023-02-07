@@ -15,5 +15,6 @@ interface PetApi {
     suspend fun getImages(
         @Query("category_ids") categories: String,
         @Query("limit") limit: Int,
+        @Query("size") size: String,
     ): Response<List<PetImageJson>>
 }

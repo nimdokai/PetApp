@@ -1,6 +1,7 @@
 package com.nimdokai.pet.core_domain
 
 import com.nimdokai.pet.core.data.DataResponse
+import com.nimdokai.pet.core.data.ImageSize
 import com.nimdokai.pet.core.data.PetRepository
 import com.nimdokai.pet.core_domain.model.PetImage
 import kotlinx.coroutines.flow.Flow
@@ -13,13 +14,16 @@ class GetCatCategoryFeedUseCase @Inject constructor(private val catRepository: P
 
     override suspend fun invoke(categoryID: String): Flow<DomainResult<out List<PetImage>>> = flow {
 
-        when (val response = catRepository.getPetImages(categoryID, 25)) {
+        when (val response =
+            catRepository.getPetImages(categoryID, 25, imageSize = ImageSize.MEDIUM)) {
             is DataResponse.Success -> {
                 val petImages = response.data.map {
                     PetImage(
                         it.id,
                         it.imageUrl,
-                        it.categoriesIDs
+                        it.categoriesIDs,
+                        it.height,
+                        it.width
                     )
                 }
                 emit(DomainResult.Success(petImages))

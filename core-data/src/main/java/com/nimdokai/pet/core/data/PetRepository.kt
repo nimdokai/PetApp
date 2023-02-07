@@ -14,7 +14,8 @@ interface PetRepository {
     suspend fun getPetDetails(petID: Int): DataResponse<out PetDetailsResponse>
     suspend fun getPetImages(
         categoryID: String,
-        numberOfImages: Int = 1
+        numberOfImages: Int = 1,
+        imageSize: ImageSize
     ): DataResponse<out List<PetImageResponse>>
 }
 
@@ -33,8 +34,9 @@ class CatRepository @Inject constructor(
     override suspend fun getPetImages(
         categoryID: String,
         numberOfImages: Int,
+        imageSize: ImageSize
     ): DataResponse<out List<PetImageResponse>> {
-        val response = tryCall({ petApi.getImages(categoryID, numberOfImages) }) {
+        val response = tryCall({ petApi.getImages(categoryID, numberOfImages, imageSize.value) }) {
             it.map { petImageJson -> petImageJson.mapToResponse() }
         }
         return response
@@ -43,7 +45,7 @@ class CatRepository @Inject constructor(
 }
 
 private fun PetImageJson.mapToResponse(): PetImageResponse {
-    return PetImageResponse(id, url, categories.map { it.id })
+    return PetImageResponse(id, url, categories.map { it.id }, height, width)
 }
 
 private fun PetCategoryJson.mapToResponse(): PetCategoryResponse {
@@ -51,4 +53,10 @@ private fun PetCategoryJson.mapToResponse(): PetCategoryResponse {
         id,
         name,
     )
+}
+
+enum class ImageSize(val value: String) {
+    SMALL("small"),
+    MEDIUM("med"),
+    FULL("full");
 }

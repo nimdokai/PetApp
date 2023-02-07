@@ -16,6 +16,7 @@ appcompat = "1.6.0"
 coil = "2.2.2"
 constraintLayout = "2.1.4"
 coroutines = "1.6.4"
+flexbox = "3.0.0"
 fragment = "1.5.5"
 hilt = "2.44.2"
 junit = "4.13.2"
@@ -56,6 +57,7 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlinx-viewbinding = { module = "androidx.databinding:viewbinding", version.ref = "viewBinding" }
 android-material = { module = "com.google.android.material:material", version.ref = "material" }
+flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 testing-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 testing-truth = { module = "com.google.truth:truth", version.ref = "truth" }
 

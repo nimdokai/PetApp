@@ -5,7 +5,11 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
+import com.google.android.flexbox.AlignItems
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.nimdokai.core_util.navigation.PetDetailsNavigator
 import com.nimdokai.core_util.viewBinding
 import com.nimdokai.pet.core.resources.views.showDefaultErrorDialog
@@ -16,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.cancelChildren
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 class PetCategoryFeedFragment : Fragment(R.layout.fragment_category_feed) {
 
@@ -23,7 +28,7 @@ class PetCategoryFeedFragment : Fragment(R.layout.fragment_category_feed) {
     private val binding by viewBinding(FragmentCategoryFeedBinding::bind)
 
     private var adapter: PetCategoryFeedAdapter =
-        PetCategoryFeedAdapter { image -> viewModel.onPetClicked(image) }
+        PetCategoryFeedAdapter { image -> viewModel.onFeedItemClicked(image) }
 
     @Inject
     lateinit var petDetailsNavigator: PetDetailsNavigator
@@ -49,6 +54,12 @@ class PetCategoryFeedFragment : Fragment(R.layout.fragment_category_feed) {
 
     private fun setupViews() {
         binding.categoriesRecyclerView.adapter = adapter
+        val layoutManager = FlexboxLayoutManager(context).apply {
+            flexWrap = FlexWrap.WRAP
+            flexDirection = FlexDirection.ROW
+            alignItems = AlignItems.STRETCH
+        }
+        binding.categoriesRecyclerView.layoutManager = layoutManager
     }
 
     private fun observeState() {
@@ -63,10 +74,16 @@ class PetCategoryFeedFragment : Fragment(R.layout.fragment_category_feed) {
         lifecycleScope.launchWhenStarted {
             viewModel.event.collect { event ->
                 when (event) {
-                    is Event.NavigateToPetDetails -> petDetailsNavigator.open(
-                        navController = findNavController(),
-                        petID = event.petID
-                    )
+                    is Event.NavigateToPetDetails ->
+                        Snackbar.make(
+                            binding.root,
+                            "to do navigate to details",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+//                        petDetailsNavigator.open(
+//                        navController = findNavController(),
+//                        petID = event.petID
+//                    )
                     is Event.ShowError -> requireContext().showDefaultErrorDialog(
                         title = event.title,
                         message = event.message,

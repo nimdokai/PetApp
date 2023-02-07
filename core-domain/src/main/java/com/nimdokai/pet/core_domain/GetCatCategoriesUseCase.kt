@@ -1,6 +1,7 @@
 package com.nimdokai.pet.core_domain
 
 import com.nimdokai.pet.core.data.DataResponse
+import com.nimdokai.pet.core.data.ImageSize
 import com.nimdokai.pet.core.data.PetRepository
 import com.nimdokai.pet.core.data.model.PetCategoryResponse
 import com.nimdokai.pet.core.data.model.PetImageResponse
@@ -25,7 +26,7 @@ class GetCatCategoriesUseCase @Inject constructor(
                     val images = categoriesResponse.data.map {
                         val id = it.id.toString()
                         async {
-                            when (val imagesResponse = repo.getPetImages(id)) {
+                            when (val imagesResponse = repo.getPetImages(id, imageSize = ImageSize.MEDIUM)) {
                                 DataResponse.NoInternet -> emptyList()
                                 DataResponse.ServerError -> emptyList()
                                 is DataResponse.Success -> imagesResponse.data

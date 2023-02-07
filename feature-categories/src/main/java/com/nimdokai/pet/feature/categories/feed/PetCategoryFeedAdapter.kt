@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.nimdokai.pet.feature.categories.databinding.ItemCategoryBinding
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.nimdokai.pet.feature.categories.databinding.ItemCategoryFeedBinding
 
 internal class PetCategoryFeedAdapter(
     private val onFeedItemClicked: ViewHolder.OnFeedItemClicked
@@ -14,7 +15,7 @@ internal class PetCategoryFeedAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
-            ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemCategoryFeedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding, onFeedItemClicked)
     }
 
@@ -23,13 +24,17 @@ internal class PetCategoryFeedAdapter(
     }
 
     class ViewHolder(
-        private val binding: ItemCategoryBinding,
+        private val binding: ItemCategoryFeedBinding,
         private val onFeedItemClicked: OnFeedItemClicked
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: PetCategoryFeedItemUI) {
-            binding.apply {
-                categoryImage.load(item.imageUrl)
-                root.setOnClickListener { onFeedItemClicked.onClicked(item) }
+
+        fun bind(item: PetCategoryFeedItemUI) = binding.run {
+            feedImage.load(item.imageUrl)
+            root.setOnClickListener { onFeedItemClicked.onClicked(item) }
+
+            val lp = feedImage.layoutParams
+            if (lp is FlexboxLayoutManager.LayoutParams) {
+                lp.flexGrow = 1f
             }
         }
 

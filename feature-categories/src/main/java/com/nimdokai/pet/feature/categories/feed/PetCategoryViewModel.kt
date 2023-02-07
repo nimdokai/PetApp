@@ -77,10 +77,11 @@ class PetCategoryViewModel @Inject constructor(
             }
     }
 
-    fun onPetClicked(item: Any) {
+    fun onFeedItemClicked(item: PetCategoryFeedItemUI) =
+        viewModelScope.launch(dispatchers.computation) {
+            _event.emit(Event.NavigateToPetDetails(item.id))
 
-
-    }
+        }
 
     data class State(
         val isLoading: Boolean = false,
@@ -88,7 +89,7 @@ class PetCategoryViewModel @Inject constructor(
     )
 
     sealed interface Event {
-        data class NavigateToPetDetails(val petID: Int) : Event
+        data class NavigateToPetDetails(val petID: String) : Event
         data class ShowError(
             @StringRes val title: Int,
             @StringRes val message: Int,
