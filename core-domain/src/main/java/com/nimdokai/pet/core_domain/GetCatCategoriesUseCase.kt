@@ -12,13 +12,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-
-interface GetPetCategoriesUseCase {
-
-    suspend operator fun invoke(): Flow<DomainResult<out List<PetCategory>>>
-
-}
-
 class GetCatCategoriesUseCase @Inject constructor(
     private val repo: PetRepository
 ) : GetPetCategoriesUseCase {
@@ -45,8 +38,8 @@ class GetCatCategoriesUseCase @Inject constructor(
                 }
             }
 
-            DataResponse.NoInternet -> DomainResult.NoInternet
-            DataResponse.ServerError -> DomainResult.ServerError
+            DataResponse.NoInternet -> emit(DomainResult.NoInternet)
+            DataResponse.ServerError -> emit(DomainResult.ServerError)
         }
     }
 }

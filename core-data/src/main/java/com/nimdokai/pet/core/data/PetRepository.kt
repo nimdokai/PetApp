@@ -3,7 +3,6 @@ package com.nimdokai.pet.core.data
 import com.nimdokai.pet.core.data.model.PetCategoryResponse
 import com.nimdokai.pet.core.data.model.PetDetailsResponse
 import com.nimdokai.pet.core.data.model.PetImageResponse
-import com.nimdokai.pet.core_network.api.ParametersKey
 import com.nimdokai.pet.core_network.api.PetApi
 import com.nimdokai.pet.core_network.model.PetCategoryJson
 import com.nimdokai.pet.core_network.model.PetImageJson
@@ -13,7 +12,10 @@ interface PetRepository {
 
     suspend fun getCategories(): DataResponse<out List<PetCategoryResponse>>
     suspend fun getPetDetails(petID: Int): DataResponse<out PetDetailsResponse>
-    suspend fun getPetImages(categoryID: String): DataResponse<out List<PetImageResponse>>
+    suspend fun getPetImages(
+        categoryID: String,
+        numberOfImages: Int = 1
+    ): DataResponse<out List<PetImageResponse>>
 }
 
 class CatRepository @Inject constructor(
@@ -28,9 +30,11 @@ class CatRepository @Inject constructor(
         TODO()
     }
 
-    override suspend fun getPetImages(categoryID: String): DataResponse<out List<PetImageResponse>> {
-        val parameters = mapOf(ParametersKey.CategoryIds.value to categoryID)
-        val response = tryCall({ petApi.getImages(parameters) }) {
+    override suspend fun getPetImages(
+        categoryID: String,
+        numberOfImages: Int,
+    ): DataResponse<out List<PetImageResponse>> {
+        val response = tryCall({ petApi.getImages(categoryID, numberOfImages) }) {
             it.map { petImageJson -> petImageJson.mapToResponse() }
         }
         return response

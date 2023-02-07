@@ -31,11 +31,10 @@ an item from the list, and its UI is written in XML.
 This is a live document, so these thoughts might change in the future.
 
 - support of landscape mode/ big screens
-- displaying more info about contracts and interactions on both matches and matchDetails screens
 - `core-tracking` where all tracking things would live
 - missing helpers tools e.g. leakCanary, Chucker
 - display of error dialog
-- pagination of upcoming matches
+- pagination of imaged in PetCategoryFeed
 - Unit Testing
 - UI testing
 - accessibility

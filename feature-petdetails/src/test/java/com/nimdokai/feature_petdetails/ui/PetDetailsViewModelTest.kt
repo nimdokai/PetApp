@@ -2,7 +2,7 @@ package com.nimdokai.feature_petdetails.ui
 
 import androidx.lifecycle.SavedStateHandle
 import com.google.common.truth.Truth.assertThat
-import com.nimdokai.core_util.navigation.date.DateFormatter
+import com.nimdokai.core_util.date.DateFormatter
 import com.nimdokai.feature_petdetails.navigation.PetDetailsNavigatorDefault.PetDetailsArgs
 import com.nimdokai.pet.core.data.GetPetDetailsResponse
 import com.nimdokai.pet.core.data.PetRepository

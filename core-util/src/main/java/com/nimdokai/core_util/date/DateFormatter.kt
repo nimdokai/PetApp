@@ -1,4 +1,4 @@
-package com.nimdokai.core_util.navigation.date
+package com.nimdokai.core_util.date
 
 import android.annotation.SuppressLint
 import java.text.ParseException

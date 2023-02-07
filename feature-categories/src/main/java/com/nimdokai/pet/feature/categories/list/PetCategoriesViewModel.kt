@@ -21,11 +21,11 @@ class PetCategoriesViewModel @Inject constructor(
     private val dispatchers: AppCoroutineDispatchers,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(CategoriesUiState())
-    val state: Flow<CategoriesUiState> = _state
+    private val _state = MutableStateFlow(PetCategoriesUiState())
+    val state: Flow<PetCategoriesUiState> = _state
 
-    private val _event = MutableSharedFlow<CategoriesEvent>()
-    val event: Flow<CategoriesEvent> = _event
+    private val _event = MutableSharedFlow<PetCategoriesEvent>()
+    val event: Flow<PetCategoriesEvent> = _event
 
     fun onFirstLaunch() {
         // screen view analytics here
@@ -36,9 +36,9 @@ class PetCategoriesViewModel @Inject constructor(
         getCategories()
     }
 
-    fun onPetClicked(matchItem: PetCategoryItemUI) =
+    fun onCategoryClicked(category: PetCategoryItemUI) =
         viewModelScope.launch(dispatchers.computation) {
-            _event.emit(CategoriesEvent.NavigateToPetDetails(matchItem.id))
+            _event.emit(PetCategoriesEvent.NavigateToCategoryFeed(category.id.toString()))
         }
 
     private fun getCategories() = viewModelScope.launch(dispatchers.io) {
@@ -52,7 +52,7 @@ class PetCategoriesViewModel @Inject constructor(
                     }
                     NoInternet -> {
                         _event.emit(
-                            CategoriesEvent.ShowError(
+                            PetCategoriesEvent.ShowError(
                                 title = R.string.dialog_no_internet_title,
                                 message = R.string.dialog_no_internet_body,
                                 buttonText = R.string.dialog_no_internet_retry,
@@ -63,7 +63,7 @@ class PetCategoriesViewModel @Inject constructor(
                     }
                     ServerError -> {
                         _event.emit(
-                            CategoriesEvent.ShowError(
+                            PetCategoriesEvent.ShowError(
                                 title = R.string.dialog_server_error_title,
                                 message = R.string.dialog_server_error_body,
                                 buttonText = R.string.dialog_server_error_retry,
@@ -78,18 +78,18 @@ class PetCategoriesViewModel @Inject constructor(
 
 }
 
-data class CategoriesUiState(
+data class PetCategoriesUiState(
     val isLoading: Boolean = false,
     val categories: List<PetCategoryItemUI> = listOf(),
 )
 
-sealed interface CategoriesEvent {
-    data class NavigateToPetDetails(val petID: Int) : CategoriesEvent
+sealed interface PetCategoriesEvent {
+    data class NavigateToCategoryFeed(val categoryID: String) : PetCategoriesEvent
     data class ShowError(
         @StringRes val title: Int,
         @StringRes val message: Int,
         @StringRes val buttonText: Int,
         val action: () -> Unit
-    ) : CategoriesEvent
+    ) : PetCategoriesEvent
 }
 

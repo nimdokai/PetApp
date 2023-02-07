@@ -2,8 +2,8 @@ package com.nimdokai.core_util.di
 
 import com.nimdokai.core_util.BuildConfigWrapper
 import com.nimdokai.core_util.Configurable
-import com.nimdokai.core_util.navigation.date.DateFormatter
-import com.nimdokai.core_util.navigation.date.DateFormatterDefault
+import com.nimdokai.core_util.date.DateFormatter
+import com.nimdokai.core_util.date.DateFormatterDefault
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

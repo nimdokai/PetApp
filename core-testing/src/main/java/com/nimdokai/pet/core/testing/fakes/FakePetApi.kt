@@ -16,7 +16,10 @@ class FakePetApi : PetApi {
         return categories!!
     }
 
-    override suspend fun getImages(filters: Map<String, String>): Response<List<PetImageJson>> {
+    override suspend fun getImages(
+        categories: String,
+        limit: Int
+    ): Response<List<PetImageJson>> {
         exception?.let { throw it }
         return images!!
     }

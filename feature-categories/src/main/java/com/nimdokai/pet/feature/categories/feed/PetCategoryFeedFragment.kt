@@ -1,4 +1,4 @@
-package com.nimdokai.pet.feature.categories.list
+package com.nimdokai.pet.feature.categories.feed
 
 import android.os.Bundle
 import android.view.View
@@ -6,26 +6,27 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.nimdokai.core_util.navigation.PetCategoryFeedNavigator
+import com.nimdokai.core_util.navigation.PetDetailsNavigator
 import com.nimdokai.core_util.viewBinding
 import com.nimdokai.pet.core.resources.views.showDefaultErrorDialog
 import com.nimdokai.pet.feature.categories.R
-import com.nimdokai.pet.feature.categories.databinding.FragmentCategoriesBinding
+import com.nimdokai.pet.feature.categories.databinding.FragmentCategoryFeedBinding
+import com.nimdokai.pet.feature.categories.feed.PetCategoryViewModel.Event
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.cancelChildren
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CategoriesFragment : Fragment(R.layout.fragment_categories) {
+class PetCategoryFeedFragment : Fragment(R.layout.fragment_category_feed) {
 
-    private val viewModel by viewModels<PetCategoriesViewModel>()
-    private val binding by viewBinding(FragmentCategoriesBinding::bind)
+    private val viewModel by viewModels<PetCategoryViewModel>()
+    private val binding by viewBinding(FragmentCategoryFeedBinding::bind)
 
-    private var adapter: CategoriesAdapter =
-        CategoriesAdapter { category -> viewModel.onCategoryClicked(category) }
+    private var adapter: PetCategoryFeedAdapter =
+        PetCategoryFeedAdapter { image -> viewModel.onPetClicked(image) }
 
     @Inject
-    lateinit var categoryFeedNavigator: PetCategoryFeedNavigator
+    lateinit var petDetailsNavigator: PetDetailsNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,11 +63,11 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories) {
         lifecycleScope.launchWhenStarted {
             viewModel.event.collect { event ->
                 when (event) {
-                    is PetCategoriesEvent.NavigateToCategoryFeed -> categoryFeedNavigator.open(
+                    is Event.NavigateToPetDetails -> petDetailsNavigator.open(
                         navController = findNavController(),
-                        categoryID = event.categoryID
+                        petID = event.petID
                     )
-                    is PetCategoriesEvent.ShowError -> requireContext().showDefaultErrorDialog(
+                    is Event.ShowError -> requireContext().showDefaultErrorDialog(
                         title = event.title,
                         message = event.message,
                         buttonText = event.buttonText,

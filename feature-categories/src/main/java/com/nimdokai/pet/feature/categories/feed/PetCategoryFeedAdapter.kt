@@ -1,4 +1,4 @@
-package com.nimdokai.pet.feature.categories.list
+package com.nimdokai.pet.feature.categories.feed
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,14 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.nimdokai.pet.feature.categories.databinding.ItemCategoryBinding
 
-internal class CategoriesAdapter(
-    private val onCategoryClickedListener: ViewHolder.OnCategoryClickedListener
-) : ListAdapter<PetCategoryItemUI, CategoriesAdapter.ViewHolder>(CategoryItemDiffUtil) {
+internal class PetCategoryFeedAdapter(
+    private val onFeedItemClicked: ViewHolder.OnFeedItemClicked
+) : ListAdapter<PetCategoryFeedItemUI, PetCategoryFeedAdapter.ViewHolder>(CategoryItemDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
             ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding, onCategoryClickedListener)
+        return ViewHolder(binding, onFeedItemClicked)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -24,33 +24,32 @@ internal class CategoriesAdapter(
 
     class ViewHolder(
         private val binding: ItemCategoryBinding,
-        private val onCategoryClickedListener: OnCategoryClickedListener
+        private val onFeedItemClicked: OnFeedItemClicked
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: PetCategoryItemUI) {
+        fun bind(item: PetCategoryFeedItemUI) {
             binding.apply {
-                categoryTitle.text = item.name
                 categoryImage.load(item.imageUrl)
-                root.setOnClickListener { onCategoryClickedListener.onClicked(item) }
+                root.setOnClickListener { onFeedItemClicked.onClicked(item) }
             }
         }
 
-        fun interface OnCategoryClickedListener {
-            fun onClicked(category: PetCategoryItemUI)
+        fun interface OnFeedItemClicked {
+            fun onClicked(item: PetCategoryFeedItemUI)
         }
     }
 
-    private object CategoryItemDiffUtil : DiffUtil.ItemCallback<PetCategoryItemUI>() {
+    private object CategoryItemDiffUtil : DiffUtil.ItemCallback<PetCategoryFeedItemUI>() {
 
         override fun areItemsTheSame(
-            oldItem: PetCategoryItemUI,
-            newItem: PetCategoryItemUI,
+            oldItem: PetCategoryFeedItemUI,
+            newItem: PetCategoryFeedItemUI,
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: PetCategoryItemUI,
-            newItem: PetCategoryItemUI,
+            oldItem: PetCategoryFeedItemUI,
+            newItem: PetCategoryFeedItemUI,
         ): Boolean {
             return oldItem == newItem
         }

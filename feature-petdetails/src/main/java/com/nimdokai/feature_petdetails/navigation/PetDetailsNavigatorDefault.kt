@@ -21,10 +21,10 @@ class PetDetailsNavigatorDefault @Inject constructor() : PetDetailsNavigator {
 
     override fun open(
         navController: NavController,
-        matchId: Int,
+        petID: Int,
     ) {
         val bundle = Bundle().apply {
-            putParcelable(KEY_ARGS, PetDetailsArgs(matchId))
+            putParcelable(KEY_ARGS, PetDetailsArgs(petID))
         }
         navController.navigate(R.id.pet_details_nav_graph, bundle, defaultNavOptions)
     }

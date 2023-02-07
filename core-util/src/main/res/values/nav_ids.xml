@@ -5,5 +5,6 @@
 
     <item name="pet_details_nav_graph" type="id" />
     <item name="categories_nav_graph" type="id" />
+    <item name="category_feed_nav_graph" type="id" />
 
 </resources>

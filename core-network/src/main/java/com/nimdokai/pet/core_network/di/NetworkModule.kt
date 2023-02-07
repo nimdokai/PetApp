@@ -10,6 +10,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Qualifier
@@ -33,9 +34,11 @@ object NetworkModuleProvider {
     @Singleton
     fun provideHttpClientAuthenticated(
         @CatApiKey catApiKey: Interceptor,
+        @LoggingOkHttpInterceptor logging: Interceptor,
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(catApiKey)
+            .addInterceptor(logging)
             .build()
     }
 
@@ -51,7 +54,19 @@ object NetworkModuleProvider {
     @Provides
     @Singleton
     fun providePetApi(retrofit: Retrofit): PetApi = retrofit.create((PetApi::class.java))
+
+    @LoggingOkHttpInterceptor
+    @Provides
+    @Singleton
+    fun provideLoggingInterceptor(): Interceptor {
+        return HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+    }
+
 }
 
 @Qualifier
 internal annotation class CatApiKey
+@Qualifier
+internal annotation class LoggingOkHttpInterceptor

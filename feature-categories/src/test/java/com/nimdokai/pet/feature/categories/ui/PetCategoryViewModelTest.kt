@@ -15,12 +15,12 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class PetCategoriesViewModelTest {
+class PetCategoryViewModelTest {
 
     private lateinit var getPetCategoriesUseCase: FakeGetPetCategoriesUseCase
 
     private lateinit var viewModel: PetCategoriesViewModel
-    private lateinit var collector: ViewModelFlowCollector<CategoriesUiState, CategoriesEvent>
+    private lateinit var collector: ViewModelFlowCollector<PetCategoriesUiState, PetCategoriesEvent>
 
     @Before
     fun setUp() {
@@ -46,7 +46,7 @@ class PetCategoriesViewModelTest {
             delay(5000)
 
             //THEN
-            val expected = CategoriesEvent.ShowError(
+            val expected = PetCategoriesEvent.ShowError(
                 title = R.string.dialog_server_error_title,
                 message = R.string.dialog_server_error_body,
                 buttonText = R.string.dialog_server_error_retry,
@@ -67,7 +67,7 @@ class PetCategoriesViewModelTest {
             delay(5000)
 
             //THEN
-            val expected = CategoriesEvent.ShowError(
+            val expected = PetCategoriesEvent.ShowError(
                 title = R.string.dialog_no_internet_title,
                 message = R.string.dialog_no_internet_body,
                 buttonText = R.string.dialog_no_internet_retry,
@@ -97,9 +97,9 @@ class PetCategoriesViewModelTest {
             delay(5000)
 
             val expectedStates = listOf(
-                CategoriesUiState(isLoading = false, categories = emptyList()),
-                CategoriesUiState(isLoading = true, categories = emptyList()),
-                CategoriesUiState(
+                PetCategoriesUiState(isLoading = false, categories = emptyList()),
+                PetCategoriesUiState(isLoading = true, categories = emptyList()),
+                PetCategoriesUiState(
                     isLoading = false,
                     categories = listOf(
                         PetCategoryItemUI(
@@ -126,7 +126,7 @@ class PetCategoriesViewModelTest {
             delay(5000)
 
             //THEN
-            val expected = CategoriesEvent.ShowError(
+            val expected = PetCategoriesEvent.ShowError(
                 title = R.string.dialog_server_error_title,
                 message = R.string.dialog_server_error_body,
                 buttonText = R.string.dialog_server_error_retry,
@@ -146,7 +146,7 @@ class PetCategoriesViewModelTest {
             delay(5000)
 
             //THEN
-            val expected = CategoriesEvent.ShowError(
+            val expected = PetCategoriesEvent.ShowError(
                 title = R.string.dialog_no_internet_title,
                 message = R.string.dialog_no_internet_body,
                 buttonText = R.string.dialog_no_internet_retry,
@@ -176,9 +176,9 @@ class PetCategoriesViewModelTest {
             delay(5000)
 
             val expectedStates = listOf(
-                CategoriesUiState(isLoading = false, categories = emptyList()),
-                CategoriesUiState(isLoading = true, categories = emptyList()),
-                CategoriesUiState(
+                PetCategoriesUiState(isLoading = false, categories = emptyList()),
+                PetCategoriesUiState(isLoading = true, categories = emptyList()),
+                PetCategoriesUiState(
                     isLoading = false,
                     categories = listOf(
                         PetCategoryItemUI(

@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson.converter)
+    implementation(libs.okhttp.logging.interceptor)
 
     // Local tests: jUnit, coroutines, Android runner
     testImplementation(libs.junit)
