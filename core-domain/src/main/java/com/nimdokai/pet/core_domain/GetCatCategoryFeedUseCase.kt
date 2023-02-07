@@ -22,8 +22,6 @@ class GetCatCategoryFeedUseCase @Inject constructor(private val catRepository: P
                         it.id,
                         it.imageUrl,
                         it.categoriesIDs,
-                        it.height,
-                        it.width
                     )
                 }
                 emit(DomainResult.Success(petImages))

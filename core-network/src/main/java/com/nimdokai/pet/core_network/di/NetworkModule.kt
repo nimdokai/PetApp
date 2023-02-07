@@ -1,13 +1,17 @@
 package com.nimdokai.pet.core_network.di
 
+import android.content.Context
 import com.nimdokai.pet.core_network.ApiConstants
 import com.nimdokai.pet.core_network.api.PetApi
 import com.nimdokai.pet.core_network.interceptors.ApiKeyInterceptor
+import com.nimdokai.pet.core_network.interceptors.ForceCacheInterceptor
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -24,6 +28,11 @@ interface NetworkModuleBinder {
     @Binds
     @CatApiKey
     fun bindApiKeyInterceptor(impl: ApiKeyInterceptor): Interceptor
+
+    @Singleton
+    @Binds
+    @CacheInterceptor
+    fun bindForceCacheInterceptor(impl: ForceCacheInterceptor): Interceptor
 }
 
 @Module
@@ -32,13 +41,23 @@ object NetworkModuleProvider {
 
     @Provides
     @Singleton
+    fun provideCache(@ApplicationContext context: Context): Cache {
+        return Cache(context.cacheDir, CACHE_SIZE)
+    }
+
+    @Provides
+    @Singleton
     fun provideHttpClientAuthenticated(
         @CatApiKey catApiKey: Interceptor,
         @LoggingOkHttpInterceptor logging: Interceptor,
+        @CacheInterceptor cacheInterceptor: Interceptor,
+        cache: Cache,
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(catApiKey)
             .addInterceptor(logging)
+            .addInterceptor(cacheInterceptor)
+            .cache(cache)
             .build()
     }
 
@@ -70,3 +89,7 @@ object NetworkModuleProvider {
 internal annotation class CatApiKey
 @Qualifier
 internal annotation class LoggingOkHttpInterceptor
+@Qualifier
+internal annotation class CacheInterceptor
+
+private const val CACHE_SIZE = 20L * 1024 * 1024 // 20 MB

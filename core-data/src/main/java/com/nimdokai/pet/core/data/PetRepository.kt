@@ -15,7 +15,7 @@ interface PetRepository {
     suspend fun getPetImages(
         categoryID: String,
         numberOfImages: Int = 1,
-        imageSize: ImageSize
+        imageSize: ImageSize = ImageSize.SMALL,
     ): DataResponse<out List<PetImageResponse>>
 }
 
@@ -45,7 +45,7 @@ class CatRepository @Inject constructor(
 }
 
 private fun PetImageJson.mapToResponse(): PetImageResponse {
-    return PetImageResponse(id, url, categories.map { it.id }, height, width)
+    return PetImageResponse(id, url, categories.map { it.id })
 }
 
 private fun PetCategoryJson.mapToResponse(): PetCategoryResponse {
@@ -55,6 +55,7 @@ private fun PetCategoryJson.mapToResponse(): PetCategoryResponse {
     )
 }
 
+@Suppress("unused")
 enum class ImageSize(val value: String) {
     SMALL("small"),
     MEDIUM("med"),
