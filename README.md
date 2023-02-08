@@ -28,6 +28,14 @@ app, and its UI is written in XML.
 `feature-petdetails` is a UI module. It has the detail view that you're taken to when you select
 an item from the list, and its UI is written in XML.
 
+
+## Before testing:
+
+Please make sure to add your own cat api key to your local.properties.
+1. Getting the token - sign up for token - https://thecatapi.com/signup 
+2. Receive the token via email
+3. put your token to 'local.properties' as: 'cat_api_key="token_from_email"'
+
 ## what is completed:
 - Overall architecture of the app
 - displaying categories
