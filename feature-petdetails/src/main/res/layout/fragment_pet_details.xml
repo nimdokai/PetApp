@@ -3,62 +3,59 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?selectableItemBackground"
-    android:paddingHorizontal="@dimen/sm"
-    android:paddingVertical="@dimen/xxs">
+    android:layout_height="match_parent">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/startTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="20:00" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/homeTeamImage"
-        android:layout_width="@dimen/item_category_team_image_width"
-        android:layout_height="@dimen/item_category_team_image_height"
-        app:layout_constraintEnd_toStartOf="@id/name"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/name"
-        tools:src="@tools:sample/avatars" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/xxs"
-        android:layout_marginTop="@dimen/sm"
-        app:layout_constraintEnd_toStartOf="@id/awayTeamImage"
-        app:layout_constraintStart_toEndOf="@id/homeTeamImage"
-        app:layout_constraintTop_toBottomOf="@id/startTime"
-        tools:text="Arsenal vs Chelsea" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/awayTeamImage"
-        android:layout_width="@dimen/item_category_team_image_width"
-        android:layout_height="@dimen/item_category_team_image_height"
-        android:layout_marginStart="@dimen/xxs"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/name"
-        app:layout_constraintTop_toTopOf="@+id/name"
-        tools:src="@tools:sample/avatars" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/markets"
+    <!-- ToDo currently only image is displayed because of cat API limits :/   -->
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/image"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/md"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="8dp"
+        android:fontFamily="sans-serif-black"
+        android:gravity="start"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image"
+        tools:text="Some Cat Breed" />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="8dp"
+        android:gravity="start"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/name"
-        tools:itemCount="10"
-        tools:listitem="@layout/item_market" />
+        tools:lines="6"
+        tools:text="@tools:sample/lorem/random" />
+
+    <TextView
+        android:id="@+id/wikiUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:autoLink="web"
+        android:fontFamily="sans-serif-light"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/description"
+        tools:text="" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -149,15 +149,11 @@ class CatRepositoryTest {
                         categories = listOf(PetImageJson.Category(1, "category name 1")),
                         id = "image id 1",
                         url = "imageUrl 1",
-                        width = 100,
-                        height = 200,
                     ),
                     PetImageJson(
                         categories = listOf(PetImageJson.Category(2, "category name 2")),
                         id = "image id 2",
                         url = "imageUrl 2",
-                        width = 10,
-                        height = 20,
                     )
                 )
             )

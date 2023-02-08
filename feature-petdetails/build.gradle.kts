@@ -40,7 +40,7 @@ android {
 dependencies {
     implementation(project(":core-resources"))
     implementation(project(":core-util"))
-    implementation(project(":core-data"))
+    implementation(project(":core-domain"))
     androidTestImplementation(project(":core-testing"))
     testImplementation(project(":core-testing"))
 
@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.coil)
+    implementation(libs.photoview)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

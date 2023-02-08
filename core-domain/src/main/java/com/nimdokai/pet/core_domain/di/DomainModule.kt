@@ -1,9 +1,6 @@
 package com.nimdokai.pet.core_domain.di
 
-import com.nimdokai.pet.core_domain.GetCatCategoriesUseCase
-import com.nimdokai.pet.core_domain.GetCatCategoryFeedUseCase
-import com.nimdokai.pet.core_domain.GetPetCategoriesUseCase
-import com.nimdokai.pet.core_domain.GetPetCategoryFeedUseCase
+import com.nimdokai.pet.core_domain.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -18,5 +15,8 @@ interface DomainModule {
 
     @Binds
     fun bindGetCatCategoryFeedUseCase(impl: GetCatCategoryFeedUseCase): GetPetCategoryFeedUseCase
+
+    @Binds
+    fun bindGetCatDetailsUseCase(impl: GetCatDetailsUseCase): GetPetDetailsUseCase
 
 }

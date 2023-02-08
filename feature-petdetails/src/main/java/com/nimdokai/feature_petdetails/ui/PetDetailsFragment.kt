@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import coil.load
 import com.nimdokai.core_util.viewBinding
 import com.nimdokai.pet.core.resources.views.showDefaultErrorDialog
 import com.nimdokai.pet.feature.petdetails.R
@@ -29,7 +30,6 @@ class PetDetailsFragment : Fragment(R.layout.fragment_pet_details) {
         super.onViewCreated(view, savedInstanceState)
         observeState()
         observeEvent()
-        setupViews()
     }
 
     override fun onDestroyView() {
@@ -37,15 +37,15 @@ class PetDetailsFragment : Fragment(R.layout.fragment_pet_details) {
         super.onDestroyView()
     }
 
-    private fun setupViews() {
-
-    }
-
     private fun observeState() {
         lifecycleScope.launchWhenStarted {
             viewModel.state.collect { state ->
-                state.petDetailsUiModel?.run {
-                    TODO()
+                state.petDetailsUI?.run {
+                    binding.image
+                        .load(url)
+//                    binding.name.text = breed.name
+//                    binding.description.text = breed.description
+
                 }
             }
         }

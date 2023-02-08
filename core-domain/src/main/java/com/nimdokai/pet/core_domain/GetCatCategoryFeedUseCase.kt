@@ -14,8 +14,13 @@ class GetCatCategoryFeedUseCase @Inject constructor(private val catRepository: P
 
     override suspend fun invoke(categoryID: String): Flow<DomainResult<out List<PetImage>>> = flow {
 
+        //ToDo it's not optimal to do 1 big call, I could actually implement pagination
         when (val response =
-            catRepository.getPetImages(categoryID, 25, imageSize = ImageSize.MEDIUM)) {
+            catRepository.getPetImages(
+                categoryID = categoryID,
+                numberOfImages = 25,
+                imageSize = ImageSize.MEDIUM,
+            )) {
             is DataResponse.Success -> {
                 val petImages = response.data.map {
                     PetImage(

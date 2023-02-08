@@ -9,10 +9,6 @@ data class PetImageJson(
     val id: String,
     @SerializedName("url")
     val url: String,
-    @SerializedName("width")
-    val width: Int,
-    @SerializedName("height")
-    val height: Int,
 ) {
     data class Category(
         @SerializedName("id")
