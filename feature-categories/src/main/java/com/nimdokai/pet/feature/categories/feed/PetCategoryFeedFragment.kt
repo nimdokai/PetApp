@@ -2,6 +2,7 @@ package com.nimdokai.pet.feature.categories.feed
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -65,6 +66,7 @@ class PetCategoryFeedFragment : Fragment(R.layout.fragment_category_feed) {
     private fun observeState() {
         lifecycleScope.launchWhenStarted {
             viewModel.state.collect { state ->
+                binding.progressBar.isVisible = state.isLoading
                 adapter.submitList(state.categories)
             }
         }

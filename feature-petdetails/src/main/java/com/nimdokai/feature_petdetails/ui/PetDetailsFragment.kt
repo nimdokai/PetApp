@@ -2,6 +2,7 @@ package com.nimdokai.feature_petdetails.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -40,6 +41,8 @@ class PetDetailsFragment : Fragment(R.layout.fragment_pet_details) {
     private fun observeState() {
         lifecycleScope.launchWhenStarted {
             viewModel.state.collect { state ->
+                binding.progressBar.isVisible = state.isLoading
+
                 state.petDetailsUI?.run {
                     binding.image
                         .load(url)
