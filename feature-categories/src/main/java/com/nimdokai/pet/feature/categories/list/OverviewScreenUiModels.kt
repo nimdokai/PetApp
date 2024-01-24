@@ -23,3 +23,9 @@ val emptyCurrentWeatherUiState = CurrentWeatherUi(
     icon = 0,
     description = "",
 )
+
+data class HourlyForecastUi(
+    val temperature: String,
+    val time: String,
+    @DrawableRes val icon: Int,
+)

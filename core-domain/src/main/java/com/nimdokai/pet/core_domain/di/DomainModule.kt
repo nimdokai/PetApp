@@ -23,7 +23,7 @@ interface DomainModule {
     fun bindGetCurrentConditionsUseCase(impl: GetCurrentConditionsUseCaseImpl): GetCurrentConditionsUseCase
 
     @Binds
-    fun bindGet12HourForecastUseCase(impl: Get12HourForecastUseCaseImpl): Get12HourForecastUseCase
+    fun bindGet12HourForecastUseCase(impl: Get12HourForecastUseCaseImpl): GetHourlyForecastUseCase
 
     @Binds
     fun bindGet5DayForecastUseCaseImpl(impl: Get5DayForecastUseCaseImpl): Get5DayForecastUseCase

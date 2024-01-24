@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,7 +25,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nimdokai.pet.core.resources.R
 import com.nimdokai.pet.core.resources.UnicodeDegreeSings
+import com.nimdokai.pet.feature.categories.list.CurrentConditionsUiState
 import com.nimdokai.pet.feature.categories.list.CurrentWeatherUi
+import com.nimdokai.pet.feature.categories.list.HourlyForecastUi
+import com.nimdokai.pet.feature.categories.list.HourlyForecastUiState
 import com.nimdokai.pet.feature.categories.list.OverviewViewModel
 
 @Composable
@@ -32,12 +37,39 @@ fun OverviewScreen(
     viewModel: OverviewViewModel = hiltViewModel()
 ) {
     val currentConditionsUiState by viewModel.currentConditionsUiState.collectAsState()
-    CurrentConditionsCard(modifier, currentConditionsUiState.currentConditions)
+    val hourlyForecastUiState by viewModel.hourlyForecastUiState.collectAsState()
+    Column {
+        CurrentConditionsCard(modifier, currentConditionsUiState)
+        HourlyForecastList(modifier, hourlyForecastUiState)
+    }
 
 }
 
 @Composable
-fun CurrentConditionsCard(modifier: Modifier = Modifier, currentConditions: CurrentWeatherUi) {
+fun HourlyForecastList(modifier: Modifier, hourlyForecastUiState: HourlyForecastUiState) {
+    LazyRow(modifier = modifier.padding(16.dp)) {
+        items(hourlyForecastUiState.forecasts) {
+            HourlyForecastCard(modifier, it)
+        }
+    }
+}
+
+@Composable
+fun HourlyForecastCard(modifier: Modifier, forecastUi: HourlyForecastUi) {
+    Column(modifier = modifier.padding(horizontal = 4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(text = forecastUi.temperature)
+        Image(
+            painter = painterResource(id = forecastUi.icon),
+            contentDescription = "Weather icon",
+            modifier = Modifier.size(40.dp)
+        )
+        Text(text = forecastUi.time)
+    }
+}
+
+@Composable
+fun CurrentConditionsCard(modifier: Modifier = Modifier, currentConditionsUiState: CurrentConditionsUiState) {
+    val currentConditions = currentConditionsUiState.currentConditions
     Column(modifier = modifier.padding(16.dp)) {
         Row(
             modifier = Modifier
@@ -89,15 +121,72 @@ fun CurrentConditionsCard(modifier: Modifier = Modifier, currentConditions: Curr
 @Composable
 fun PreviewCurrentConditionsCard() {
     CurrentConditionsCard(
-        modifier = Modifier, currentConditions = CurrentWeatherUi(
-            epochTime = 0,
-            hasPrecipitation = true,
-            isDayTime = true,
-            temperature = "20${UnicodeDegreeSings.Celsius}",
-            pastMaxTemp = "31${UnicodeDegreeSings.Celsius}",
-            pastMinTemp = "-5${UnicodeDegreeSings.Celsius}",
-            icon = R.drawable.weather_icon_01,
-            description = "Sunny day",
+        modifier = Modifier,
+        currentConditionsUiState = CurrentConditionsUiState(
+            isLoading = false,
+            currentConditions = CurrentWeatherUi(
+                epochTime = 0,
+                hasPrecipitation = true,
+                isDayTime = true,
+                temperature = "20${UnicodeDegreeSings.Celsius}",
+                pastMaxTemp = "31${UnicodeDegreeSings.Celsius}",
+                pastMinTemp = "-5${UnicodeDegreeSings.Celsius}",
+                icon = R.drawable.weather_icon_01,
+                description = "Sunny day",
+            ),
+        )
+    )
+}
+
+@Preview
+@Composable
+fun PreviewHourlyForecastList() {
+    HourlyForecastList(
+        modifier = Modifier,
+        hourlyForecastUiState = HourlyForecastUiState(
+            isLoading = false,
+            forecasts = listOf(
+                HourlyForecastUi(
+                    temperature = "20${UnicodeDegreeSings.Celsius}",
+                    time = "now",
+                    icon = R.drawable.weather_icon_01
+                ),
+                HourlyForecastUi(
+                    temperature = "20${UnicodeDegreeSings.Celsius}",
+                    time = "11:00",
+                    icon = R.drawable.weather_icon_02
+                ),
+                HourlyForecastUi(
+                    temperature = "20${UnicodeDegreeSings.Celsius}",
+                    time = "12:00",
+                    icon = R.drawable.weather_icon_03
+                ),
+                HourlyForecastUi(
+                    temperature = "20${UnicodeDegreeSings.Celsius}",
+                    time = "13:00",
+                    icon = R.drawable.weather_icon_04
+                ),
+                HourlyForecastUi(
+                    temperature = "20${UnicodeDegreeSings.Celsius}",
+                    time = "14:00",
+                    icon = R.drawable.weather_icon_05
+                ),
+                HourlyForecastUi(
+                    temperature = "20${UnicodeDegreeSings.Celsius}",
+                    time = "15:00",
+                    icon = R.drawable.weather_icon_06
+                ),
+                HourlyForecastUi(
+                    temperature = "20${UnicodeDegreeSings.Celsius}",
+                    time = "16:00",
+                    icon = R.drawable.weather_icon_07
+                ),
+                HourlyForecastUi(
+                    temperature = "20${UnicodeDegreeSings.Celsius}",
+                    time = "17:00",
+                    icon = R.drawable.weather_icon_08
+                ),
+            )
         )
     )
 }

@@ -4,4 +4,5 @@ data class HourlyForecast(
     val epochTime: Int,
     val hasPrecipitation: Boolean,
     val temperature: Temperature,
+    val weatherType: Int,
 )

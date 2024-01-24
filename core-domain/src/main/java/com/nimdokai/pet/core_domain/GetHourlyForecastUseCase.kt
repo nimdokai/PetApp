@@ -3,8 +3,8 @@ package com.nimdokai.pet.core_domain
 import com.nimdokai.pet.core.data.model.HourlyForecast
 import kotlinx.coroutines.flow.Flow
 
-interface Get12HourForecastUseCase {
+interface GetHourlyForecastUseCase {
 
-    suspend operator fun invoke(): Flow<DomainResult<out List<HourlyForecast>>>
+    operator fun invoke(): Flow<DomainResult<out List<HourlyForecast>>>
 
 }

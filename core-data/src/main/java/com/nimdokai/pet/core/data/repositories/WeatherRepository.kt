@@ -112,7 +112,8 @@ internal fun HourlyForecastJsonResponse.toDataModel(useMetric: Boolean): HourlyF
             Temperature.Celsius(temperature.value)
         } else {
             Temperature.Fahrenheit(temperature.value)
-        }
+        },
+        weatherType = weatherIcon,
     )
 }
 

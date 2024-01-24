@@ -4,7 +4,9 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nimdokai.core_util.AppCoroutineDispatchers
+import com.nimdokai.core_util.date.DateFormatter
 import com.nimdokai.pet.core.data.model.CurrentConditions
+import com.nimdokai.pet.core.data.model.HourlyForecast
 import com.nimdokai.pet.core.data.model.Temperature
 import com.nimdokai.pet.core.resources.R
 import com.nimdokai.pet.core.resources.UnicodeDegreeSings
@@ -14,6 +16,7 @@ import com.nimdokai.pet.core_domain.DomainResult.NoInternet
 import com.nimdokai.pet.core_domain.DomainResult.ServerError
 import com.nimdokai.pet.core_domain.DomainResult.Success
 import com.nimdokai.pet.core_domain.GetCurrentConditionsUseCase
+import com.nimdokai.pet.core_domain.GetHourlyForecastUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -28,6 +31,8 @@ import javax.inject.Inject
 class OverviewViewModel @Inject constructor(
     private val dispatchers: AppCoroutineDispatchers,
     getCurrentConditionsUseCase: GetCurrentConditionsUseCase,
+    getHourlyForecastUseCase: GetHourlyForecastUseCase,
+    private val dateFormatter: DateFormatter
 ) : ViewModel() {
 
     private val _event = MutableSharedFlow<PetCategoriesEvent>()
@@ -45,6 +50,17 @@ class OverviewViewModel @Inject constructor(
                 )
             )
 
+    val hourlyForecastUiState: StateFlow<HourlyForecastUiState> =
+        getHourlyForecastUseCase()
+            .map(::mapHourlyForecastResult)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = HourlyForecastUiState(
+                    forecasts = emptyList(),
+                    isLoading = true
+                )
+            )
 
     fun onFirstLaunch() {
         // screen view analytics here
@@ -69,29 +85,59 @@ class OverviewViewModel @Inject constructor(
             }
 
             NoInternet -> {
-                _event.emit(
-                    PetCategoriesEvent.ShowError(
-                        title = R.string.dialog_no_internet_title,
-                        message = R.string.dialog_no_internet_body,
-                        buttonText = R.string.dialog_no_internet_retry,
-                        ::onRetryGetCategories
-                    )
-                )
+                onNoInternet(::onRetryGetCategories)
                 currentConditionsUiState.value.copy(isLoading = false)
             }
 
             ServerError -> {
-                _event.emit(
-                    PetCategoriesEvent.ShowError(
-                        title = R.string.dialog_server_error_title,
-                        message = R.string.dialog_server_error_body,
-                        buttonText = R.string.dialog_server_error_retry,
-                        ::onRetryGetCategories
-                    )
-                )
+                onServerError(::onRetryGetCategories)
                 currentConditionsUiState.value.copy(isLoading = false)
             }
         }
+    }
+
+    private suspend fun mapHourlyForecastResult(result: DomainResult<out List<HourlyForecast>>): HourlyForecastUiState {
+        return when (result) {
+            is Success -> {
+                val hourlyForecastUi = result.data.map { it.toUi() }
+                hourlyForecastUiState.value.copy(
+                    isLoading = false,
+                    forecasts = hourlyForecastUi
+                )
+            }
+
+            NoInternet -> {
+                onNoInternet(::onRetryGetCategories)
+                hourlyForecastUiState.value.copy(isLoading = false)
+            }
+
+            ServerError -> {
+                onServerError(::onRetryGetCategories)
+                hourlyForecastUiState.value.copy(isLoading = false)
+            }
+        }
+    }
+
+    private suspend fun onServerError(onRetry: () -> Unit) {
+        _event.emit(
+            PetCategoriesEvent.ShowError(
+                title = R.string.dialog_server_error_title,
+                message = R.string.dialog_server_error_body,
+                buttonText = R.string.dialog_server_error_retry,
+                onRetry
+            )
+        )
+    }
+
+    private suspend fun onNoInternet(onRetry: () -> Unit) {
+        _event.emit(
+            PetCategoriesEvent.ShowError(
+                title = R.string.dialog_no_internet_title,
+                message = R.string.dialog_no_internet_body,
+                buttonText = R.string.dialog_no_internet_retry,
+                onRetry
+            )
+        )
     }
 
     private fun CurrentConditions.toUi(): CurrentWeatherUi {
@@ -115,8 +161,14 @@ class OverviewViewModel @Inject constructor(
         return "${temperature.value.toInt()}$unit"
     }
 
+    private fun HourlyForecast.toUi(): HourlyForecastUi {
+        return HourlyForecastUi(
+            temperature = addMeasureUnitTo(temperature),
+            time = dateFormatter.format(epochTime, "HH:mm"),
+            icon = getWeatherIcon(weatherType),
+        )
+    }
 }
-
 
 data class OverviewUiState(
     val currentConditions: CurrentConditionsUiState
@@ -125,6 +177,11 @@ data class OverviewUiState(
 data class CurrentConditionsUiState(
     val isLoading: Boolean = false,
     val currentConditions: CurrentWeatherUi,
+)
+
+data class HourlyForecastUiState(
+    val isLoading: Boolean = false,
+    val forecasts: List<HourlyForecastUi>,
 )
 
 sealed interface PetCategoriesEvent {

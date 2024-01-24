@@ -7,6 +7,7 @@ import java.util.*
 
 interface DateFormatter {
     fun formatOnlyHourIfToday(date: String): String
+    fun format(epochTime: Int, outPutFormat: String): String
 }
 
 internal object DateFormatterDefault : DateFormatter {
@@ -28,6 +29,13 @@ internal object DateFormatterDefault : DateFormatter {
             SimpleDateFormat("dd-MM-yyyy HH:mm")
         }
         return timeFormat.format(parsedDate)
+    }
+
+    override fun format(epochTime: Int, outPutFormat: String): String {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = epochTime * 1000L
+        val dateFormat = SimpleDateFormat(outPutFormat, Locale.getDefault())
+        return dateFormat.format(calendar.time)
     }
 
     private fun isToday(
