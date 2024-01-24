@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.nimdokai.pet.core.resources"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 21
@@ -15,24 +15,23 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
-    @Suppress("UnstableApiUsage")
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
-    @Suppress("UnstableApiUsage")
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
     buildFeatures {
         viewBinding = true
     }
 
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
 }
 
 dependencies {

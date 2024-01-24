@@ -8,24 +8,22 @@ plugins {
 
 android {
     namespace = "com.nimdokai.pet"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.nimdokai.pet"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "com.nimdokai.pet.core.testing.HiltTestRunner"
-        @Suppress("UnstableApiUsage")
         vectorDrawables {
             useSupportLibrary = true
         }
     }
 
     buildTypes {
-        @Suppress("UnstableApiUsage")
         getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
@@ -36,18 +34,23 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
-    @Suppress("UnstableApiUsage")
     buildFeatures {
         viewBinding = true
+        compose = true
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
+    }
+
 }
 
 dependencies {
@@ -67,6 +70,11 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.activity.compose)
 
     // Hilt Dependency Injection
     implementation(libs.hilt.android)

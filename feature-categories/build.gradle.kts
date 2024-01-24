@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.nimdokai.pet.feature.categories"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 21
@@ -19,23 +19,21 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
-    @Suppress("UnstableApiUsage")
     buildFeatures {
         viewBinding = true
     }
 
-    @Suppress("UnstableApiUsage")
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
@@ -45,8 +43,6 @@ dependencies {
     implementation(project(":core-domain"))
     androidTestImplementation(project(":core-testing"))
     testImplementation(project(":core-testing"))
-
-    implementation(libs.androidx.activity.compose)
 
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
