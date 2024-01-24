@@ -3,14 +3,16 @@ package com.nimdokai.pet.core.data.repositories
 import com.nimdokai.pet.core.data.DataResponse
 import com.nimdokai.pet.core.data.model.CurrentConditions
 import com.nimdokai.pet.core.data.model.DailyForecast
-import com.nimdokai.pet.core.data.model.Temperature
 import com.nimdokai.pet.core.data.model.HourlyForecast
+import com.nimdokai.pet.core.data.model.Temperature
+import com.nimdokai.pet.core.data.model.TemperatureSummary
 import com.nimdokai.pet.core.data.tryCall
 import com.nimdokai.pet.core_network.api.AccuWeatherApi
-import com.nimdokai.pet.core_network.model.CurrentConditionsJsonResponse
+import com.nimdokai.pet.core_network.model.AvailableUnitTypesHolderJson
+import com.nimdokai.pet.core_network.model.CurrentConditionsJson
 import com.nimdokai.pet.core_network.model.DailyForecastItemJsonResponse
 import com.nimdokai.pet.core_network.model.HourlyForecastJsonResponse
-import com.nimdokai.pet.core_network.model.AvailableUnitTypesHolderJsonResponse
+import com.nimdokai.pet.core_network.model.TemperatureSummaryJson
 import javax.inject.Inject
 
 interface WeatherRepository {
@@ -69,48 +71,40 @@ class WeatherRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun CurrentConditionsJsonResponse.toDataModel(unit: String): CurrentConditions {
+    private fun CurrentConditionsJson.toDataModel(unit: String): CurrentConditions {
         return CurrentConditions(
             epochTime = epochTime,
             hasPrecipitation = hasPrecipitation,
             isDayTime = isDayTime,
-            temperature = temperature.toDataModel(unit)
-        )
-    }
-
-    private fun AvailableUnitTypesHolderJsonResponse.toDataModel(unit: String): Temperature {
-        return when (unit) {
-            "F" -> Temperature.Fahrenheit(imperial.value)
-            else -> Temperature.Celsius(metric.value)
-        }
-    }
-
-    private fun DailyForecastItemJsonResponse.toDataModel(useMetric: Boolean): DailyForecast {
-
-        val minTempValue = temperatureMaxMinHolderJsonResponse.minimum.value
-        val nightTemperature = if (useMetric) {
-            Temperature.Celsius(minTempValue)
-        } else {
-            Temperature.Fahrenheit(minTempValue)
-        }
-
-        val maxTempValue = temperatureMaxMinHolderJsonResponse.maximum.value
-        val dayTemperature = if (useMetric) {
-            Temperature.Celsius(maxTempValue)
-        } else {
-            Temperature.Fahrenheit(maxTempValue)
-        }
-
-        return DailyForecast(
-            epochDate,
-            dayTemperature,
-            nightTemperature,
+            temperatureSummary = temperatureSummary.toDataModel(temperature, unit),
+            description = weatherText,
+            weatherType = weatherIcon,
         )
     }
 
 }
 
-private fun HourlyForecastJsonResponse.toDataModel(useMetric: Boolean): HourlyForecast {
+internal fun AvailableUnitTypesHolderJson.toDataModel(unit: String): Temperature {
+    //ToDo this is only working for temperature
+    return when (unit) {
+        "F" -> Temperature.Fahrenheit(imperial.value)
+        else -> Temperature.Celsius(metric.value)
+    }
+}
+
+internal fun TemperatureSummaryJson.toDataModel(
+    currentTemp: AvailableUnitTypesHolderJson,
+    measureUnit: String
+): TemperatureSummary {
+    return TemperatureSummary(
+        current = currentTemp.toDataModel(measureUnit),
+        pastMin = past24HourRange.minimum.toDataModel(measureUnit),
+        pastMax = past24HourRange.maximum.toDataModel(measureUnit),
+    )
+}
+
+
+internal fun HourlyForecastJsonResponse.toDataModel(useMetric: Boolean): HourlyForecast {
     return HourlyForecast(
         epochTime = epochTime,
         hasPrecipitation = hasPrecipitation,
@@ -120,5 +114,26 @@ private fun HourlyForecastJsonResponse.toDataModel(useMetric: Boolean): HourlyFo
             Temperature.Fahrenheit(temperature.value)
         }
     )
+}
 
+internal fun DailyForecastItemJsonResponse.toDataModel(useMetric: Boolean): DailyForecast {
+    val minTempValue = temperatureMaxMinHolderJsonResponse.minimum.value
+    val nightTemperature = if (useMetric) {
+        Temperature.Celsius(minTempValue)
+    } else {
+        Temperature.Fahrenheit(minTempValue)
+    }
+
+    val maxTempValue = temperatureMaxMinHolderJsonResponse.maximum.value
+    val dayTemperature = if (useMetric) {
+        Temperature.Celsius(maxTempValue)
+    } else {
+        Temperature.Fahrenheit(maxTempValue)
+    }
+
+    return DailyForecast(
+        epochDate,
+        dayTemperature,
+        nightTemperature,
+    )
 }

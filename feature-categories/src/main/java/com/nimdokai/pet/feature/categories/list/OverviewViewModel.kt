@@ -5,7 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nimdokai.core_util.AppCoroutineDispatchers
 import com.nimdokai.pet.core.data.model.CurrentConditions
+import com.nimdokai.pet.core.data.model.Temperature
 import com.nimdokai.pet.core.resources.R
+import com.nimdokai.pet.core.resources.UnicodeDegreeSings
+import com.nimdokai.pet.core.resources.getWeatherIcon
 import com.nimdokai.pet.core_domain.DomainResult
 import com.nimdokai.pet.core_domain.DomainResult.NoInternet
 import com.nimdokai.pet.core_domain.DomainResult.ServerError
@@ -24,7 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class OverviewViewModel @Inject constructor(
     private val dispatchers: AppCoroutineDispatchers,
-    private val getCurrentConditionsUseCase: GetCurrentConditionsUseCase,
+    getCurrentConditionsUseCase: GetCurrentConditionsUseCase,
 ) : ViewModel() {
 
     private val _event = MutableSharedFlow<PetCategoriesEvent>()
@@ -41,7 +44,11 @@ class OverviewViewModel @Inject constructor(
                         epochTime = 0,
                         hasPrecipitation = false,
                         isDayTime = false,
-                        temperature = ""
+                        temperature = "",
+                        pastMaxTemp = "",
+                        pastMinTemp = "",
+                        icon = 0,
+                        description = "",
                     ),
                     isLoading = true
                 )
@@ -96,12 +103,26 @@ class OverviewViewModel @Inject constructor(
         }
     }
 
-    private fun CurrentConditions.toUi(): CurrentWeatherUi = CurrentWeatherUi(
-        epochTime,
-        hasPrecipitation,
-        isDayTime,
-        temperature.value.toString(),
-    )
+    private fun CurrentConditions.toUi(): CurrentWeatherUi {
+        return CurrentWeatherUi(
+            epochTime = epochTime,
+            hasPrecipitation = hasPrecipitation,
+            isDayTime = isDayTime,
+            temperature = addMeasureUnitTo(temperatureSummary.current),
+            pastMaxTemp = addMeasureUnitTo(temperatureSummary.pastMax),
+            pastMinTemp = addMeasureUnitTo(temperatureSummary.pastMin),
+            icon = getWeatherIcon(weatherType),
+            description = description,
+        )
+    }
+
+    private fun addMeasureUnitTo(temperature: Temperature): String {
+        val unit = when (temperature) {
+            is Temperature.Celsius -> UnicodeDegreeSings.Celsius
+            is Temperature.Fahrenheit -> UnicodeDegreeSings.Fahrenheit
+        }
+        return "${temperature.value.toInt()}$unit"
+    }
 
 }
 

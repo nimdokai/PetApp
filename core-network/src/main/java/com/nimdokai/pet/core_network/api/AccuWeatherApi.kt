@@ -1,6 +1,6 @@
 package com.nimdokai.pet.core_network.api
 
-import com.nimdokai.pet.core_network.model.CurrentConditionsJsonResponse
+import com.nimdokai.pet.core_network.model.CurrentConditionsJson
 import com.nimdokai.pet.core_network.model.DailyForecastJsonResponse
 import com.nimdokai.pet.core_network.model.HourlyForecastJsonResponse
 import retrofit2.Response
@@ -14,7 +14,7 @@ interface AccuWeatherApi {
     suspend fun getCurrentConditionsForLocation(
         @Path("locationId") locationId: String,
         @Query("details") details: Boolean = true,
-    ): Response<List<CurrentConditionsJsonResponse>>
+    ): Response<List<CurrentConditionsJson>>
 
     @GET("forecasts/v1/hourly/12hour/{locationId}")
     suspend fun get12HourForecast(

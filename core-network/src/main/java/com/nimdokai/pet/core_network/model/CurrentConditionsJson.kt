@@ -3,15 +3,15 @@ package com.nimdokai.pet.core_network.model
 
 import com.google.gson.annotations.SerializedName
 
-data class CurrentConditionsJsonResponse(
+data class CurrentConditionsJson(
     @SerializedName("ApparentTemperature")
-    val apparentTemperature: AvailableUnitTypesHolderJsonResponse,
+    val apparentTemperature: AvailableUnitTypesHolderJson,
     @SerializedName("Ceiling")
-    val ceiling: AvailableUnitTypesHolderJsonResponse,
+    val ceiling: AvailableUnitTypesHolderJson,
     @SerializedName("CloudCover")
     val cloudCover: Int,
     @SerializedName("DewPoint")
-    val dewPoint: AvailableUnitTypesHolderJsonResponse,
+    val dewPoint: AvailableUnitTypesHolderJson,
     @SerializedName("EpochTime")
     val epochTime: Int,
     @SerializedName("HasPrecipitation")
@@ -29,102 +29,102 @@ data class CurrentConditionsJsonResponse(
     @SerializedName("ObstructionsToVisibility")
     val obstructionsToVisibility: String,
     @SerializedName("Past24HourTemperatureDeparture")
-    val past24HourTemperatureDeparture: AvailableUnitTypesHolderJsonResponse,
+    val past24HourTemperatureDeparture: AvailableUnitTypesHolderJson,
     @SerializedName("Precip1hr")
-    val precip1hr: AvailableUnitTypesHolderJsonResponse,
+    val precip1hr: AvailableUnitTypesHolderJson,
     @SerializedName("PrecipitationSummary")
-    val precipitationSummary: PrecipitationSummary,
+    val precipitationSummary: PrecipitationSummaryJson,
     @SerializedName("PrecipitationType")
     val precipitationType: Any,
     @SerializedName("Pressure")
-    val pressure: AvailableUnitTypesHolderJsonResponse,
+    val pressure: AvailableUnitTypesHolderJson,
     @SerializedName("PressureTendency")
-    val pressureTendency: PressureTendency,
+    val pressureTendency: PressureTendencyJson,
     @SerializedName("RealFeelTemperature")
-    val realFeelTemperature: AvailableUnitTypesHolderJsonResponse,
+    val realFeelTemperature: AvailableUnitTypesHolderJson,
     @SerializedName("RealFeelTemperatureShade")
-    val realFeelTemperatureShade: AvailableUnitTypesHolderJsonResponse,
+    val realFeelTemperatureShade: AvailableUnitTypesHolderJson,
     @SerializedName("RelativeHumidity")
     val relativeHumidity: Int,
     @SerializedName("Temperature")
-    val temperature: AvailableUnitTypesHolderJsonResponse,
+    val temperature: AvailableUnitTypesHolderJson,
     @SerializedName("TemperatureSummary")
-    val temperatureSummary: TemperatureSummary,
+    val temperatureSummary: TemperatureSummaryJson,
     @SerializedName("UVIndex")
     val uVIndex: Int,
     @SerializedName("UVIndexText")
     val uVIndexText: String,
     @SerializedName("Visibility")
-    val visibility: AvailableUnitTypesHolderJsonResponse,
+    val visibility: AvailableUnitTypesHolderJson,
     @SerializedName("WeatherIcon")
     val weatherIcon: Int,
     @SerializedName("WeatherText")
     val weatherText: String,
     @SerializedName("WetBulbTemperature")
-    val wetBulbTemperature: AvailableUnitTypesHolderJsonResponse,
+    val wetBulbTemperature: AvailableUnitTypesHolderJson,
     @SerializedName("Wind")
-    val wind: Wind,
+    val wind: WindJson,
     @SerializedName("WindChillTemperature")
-    val windChillTemperature: AvailableUnitTypesHolderJsonResponse,
+    val windChillTemperature: AvailableUnitTypesHolderJson,
     @SerializedName("WindGust")
     val windGust: WindGust
 )
 
-data class PrecipitationSummary(
+data class PrecipitationSummaryJson(
     @SerializedName("Past12Hours")
-    val past12Hours: AvailableUnitTypesHolderJsonResponse,
+    val past12Hours: AvailableUnitTypesHolderJson,
     @SerializedName("Past18Hours")
-    val past18Hours: AvailableUnitTypesHolderJsonResponse,
+    val past18Hours: AvailableUnitTypesHolderJson,
     @SerializedName("Past24Hours")
-    val past24Hours: AvailableUnitTypesHolderJsonResponse,
+    val past24Hours: AvailableUnitTypesHolderJson,
     @SerializedName("Past3Hours")
-    val past3Hours: AvailableUnitTypesHolderJsonResponse,
+    val past3Hours: AvailableUnitTypesHolderJson,
     @SerializedName("Past6Hours")
-    val past6Hours: AvailableUnitTypesHolderJsonResponse,
+    val past6Hours: AvailableUnitTypesHolderJson,
     @SerializedName("Past9Hours")
-    val past9Hours: AvailableUnitTypesHolderJsonResponse,
+    val past9Hours: AvailableUnitTypesHolderJson,
     @SerializedName("PastHour")
-    val pastHour: AvailableUnitTypesHolderJsonResponse,
+    val pastHour: AvailableUnitTypesHolderJson,
     @SerializedName("Precipitation")
-    val precipitation: MeasureUnitJsonResponse
+    val precipitation: AvailableUnitTypesHolderJson
 )
 
-data class PressureTendency(
+data class PressureTendencyJson(
     @SerializedName("Code")
     val code: String,
     @SerializedName("LocalizedText")
     val localizedText: String
 )
 
-data class TemperatureSummary(
+data class TemperatureSummaryJson(
     @SerializedName("Past12HourRange")
-    val past12HourRange: PastHoursRange,
+    val past12HourRange: PastHoursRangeJson,
     @SerializedName("Past24HourRange")
-    val past24HourRange: PastHoursRange,
+    val past24HourRange: PastHoursRangeJson,
     @SerializedName("Past6HourRange")
-    val past6HourRange: PastHoursRange
+    val past6HourRange: PastHoursRangeJson
 )
 
-data class Wind(
+data class WindJson(
     @SerializedName("Direction")
-    val direction: Direction,
+    val direction: DirectionJson,
     @SerializedName("Speed")
-    val speed: MeasureUnitJsonResponse
+    val speed: AvailableUnitTypesHolderJson
 )
 
 data class WindGust(
     @SerializedName("Speed")
-    val speed: MeasureUnitJsonResponse
+    val speed: AvailableUnitTypesHolderJson
 )
 
-data class PastHoursRange(
+data class PastHoursRangeJson(
     @SerializedName("Maximum")
-    val maximum: MeasureUnitJsonResponse,
+    val maximum: AvailableUnitTypesHolderJson,
     @SerializedName("Minimum")
-    val minimum: MeasureUnitJsonResponse
+    val minimum: AvailableUnitTypesHolderJson
 )
 
-data class Direction(
+data class DirectionJson(
     @SerializedName("Degrees")
     val degrees: Int,
     @SerializedName("English")
