@@ -17,9 +17,15 @@
 package com.nimdokai.pet.ui
 
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.nimdokai.pet.core.resources.theme.AppTheme
 import com.nimdokai.pet.R
 import com.nimdokai.pet.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,17 +33,19 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContent {
+            AppTheme {
+                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        setupNavController()
+                }
+            }
+        }
     }
+
 
     private fun setupNavController() {
         val navHostFragment =
