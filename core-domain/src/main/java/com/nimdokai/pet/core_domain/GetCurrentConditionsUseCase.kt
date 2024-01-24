@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface GetCurrentConditionsUseCase {
 
-    suspend operator fun invoke(): Flow<DomainResult<out CurrentConditions>>
+    operator fun invoke(): Flow<DomainResult<out CurrentConditions>>
 
 }

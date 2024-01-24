@@ -12,7 +12,7 @@ class GetCurrentConditionsUseCaseImpl @Inject constructor(
 ) : GetCurrentConditionsUseCase {
 
     //ToDo is is correct to create a flow every time?
-    override suspend fun invoke(): Flow<DomainResult<out CurrentConditions>> = flow {
+    override fun invoke(): Flow<DomainResult<out CurrentConditions>> = flow {
 
         // ToDo pass the location
         val locationId = "326967"

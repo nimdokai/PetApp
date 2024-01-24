@@ -2,7 +2,6 @@ package com.nimdokai.pet.feature.categories.list
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -19,7 +18,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class CategoriesFragment : Fragment(R.layout.fragment_categories) {
 
-    private val viewModel by viewModels<PetCategoriesViewModel>()
+    private val viewModel by viewModels<OverviewViewModel>()
     private val binding by viewBinding(FragmentCategoriesBinding::bind)
 
     private var adapter: CategoriesAdapter =
@@ -52,11 +51,7 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories) {
 
     private fun observeState() {
         lifecycleScope.launchWhenStarted {
-            viewModel.state.collect { state ->
-                with(binding) {
-                    progressBar.isVisible = state.isLoading
-                    temperature.text = state.currentConditions.temperature
-                }
+            viewModel.currentConditionsUiState.collect { state ->
             }
         }
     }

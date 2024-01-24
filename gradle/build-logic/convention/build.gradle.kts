@@ -13,6 +13,9 @@ dependencies {
 //    compileOnly(libs.kotlin.gradlePlugin)
 }
 
+// TODO https://github.com/chrisbanes/tivi/commit/efbe3e4f80cae38042c3f6b0ed2472443ff49428
+// TODO https://medium.com/adessoturkey/modern-dependency-management-gradle-version-catalogs-and-convention-plugins-c9a822aa270e
+
 gradlePlugin {
     plugins {
 

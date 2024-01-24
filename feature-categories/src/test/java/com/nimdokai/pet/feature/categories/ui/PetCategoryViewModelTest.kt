@@ -19,20 +19,20 @@ class PetCategoryViewModelTest {
 
     private lateinit var getPetCategoriesUseCase: FakeGetPetCategoriesUseCase
 
-    private lateinit var viewModel: PetCategoriesViewModel
-    private lateinit var collector: ViewModelFlowCollector<PetCategoriesUiState, PetCategoriesEvent>
+    private lateinit var viewModel: OverviewViewModel
+    private lateinit var collector: ViewModelFlowCollector<OverviewUiState, PetCategoriesEvent>
 
     @Before
     fun setUp() {
 
         getPetCategoriesUseCase = FakeGetPetCategoriesUseCase()
 
-        viewModel = PetCategoriesViewModel(
+        viewModel = OverviewViewModel(
             getPetCategoriesUseCase,
             TestCoroutineDispatchers,
         )
 
-        collector = ViewModelFlowCollector(viewModel.state, viewModel.event)
+        collector = ViewModelFlowCollector(viewModel.currentConditionsUiState, viewModel.event)
     }
 
     @Test
@@ -97,9 +97,9 @@ class PetCategoryViewModelTest {
             delay(5000)
 
             val expectedStates = listOf(
-                PetCategoriesUiState(isLoading = false, currentConditions = emptyList()),
-                PetCategoriesUiState(isLoading = true, currentConditions = emptyList()),
-                PetCategoriesUiState(
+                OverviewUiState(isLoading = false, currentConditions = emptyList()),
+                OverviewUiState(isLoading = true, currentConditions = emptyList()),
+                OverviewUiState(
                     isLoading = false,
                     currentConditions = listOf(
                         CurrentWeatherUi(
@@ -176,9 +176,9 @@ class PetCategoryViewModelTest {
             delay(5000)
 
             val expectedStates = listOf(
-                PetCategoriesUiState(isLoading = false, currentConditions = emptyList()),
-                PetCategoriesUiState(isLoading = true, currentConditions = emptyList()),
-                PetCategoriesUiState(
+                OverviewUiState(isLoading = false, currentConditions = emptyList()),
+                OverviewUiState(isLoading = true, currentConditions = emptyList()),
+                OverviewUiState(
                     isLoading = false,
                     currentConditions = listOf(
                         CurrentWeatherUi(
