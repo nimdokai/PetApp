@@ -22,7 +22,7 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories) {
     private val binding by viewBinding(FragmentCategoriesBinding::bind)
 
     private var adapter: CategoriesAdapter =
-        CategoriesAdapter { category -> viewModel.onCategoryClicked(category) }
+        CategoriesAdapter { category -> viewModel.onCategoryClicked() }
 
     @Inject
     lateinit var categoryFeedNavigator: PetCategoryFeedNavigator

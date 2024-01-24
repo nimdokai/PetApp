@@ -40,16 +40,7 @@ class OverviewViewModel @Inject constructor(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = CurrentConditionsUiState(
-                    currentConditions = CurrentWeatherUi(
-                        epochTime = 0,
-                        hasPrecipitation = false,
-                        isDayTime = false,
-                        temperature = "",
-                        pastMaxTemp = "",
-                        pastMinTemp = "",
-                        icon = 0,
-                        description = "",
-                    ),
+                    currentConditions = emptyCurrentWeatherUiState,
                     isLoading = true
                 )
             )
@@ -62,7 +53,7 @@ class OverviewViewModel @Inject constructor(
     fun onRetryGetCategories() {
     }
 
-    fun onCategoryClicked(category: CurrentWeatherUi) =
+    fun onCategoryClicked() =
         viewModelScope.launch(dispatchers.computation) {
             // TODO
         }

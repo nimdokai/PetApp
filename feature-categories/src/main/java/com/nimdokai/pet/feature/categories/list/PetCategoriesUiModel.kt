@@ -12,3 +12,14 @@ data class CurrentWeatherUi(
     @DrawableRes val icon: Int,
     val description: String,
 )
+
+val emptyCurrentWeatherUiState = CurrentWeatherUi(
+    epochTime = 0,
+    hasPrecipitation = false,
+    isDayTime = false,
+    temperature = "",
+    pastMaxTemp = "",
+    pastMinTemp = "",
+    icon = 0,
+    description = "",
+)
