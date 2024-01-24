@@ -1,8 +1,7 @@
 package com.nimdokai.pet.core.data.model
 
-data class CurrentConditions(
+data class HourlyForecast(
     val epochTime: Int,
     val hasPrecipitation: Boolean,
-    val isDayTime: Boolean,
     val temperature: Temperature,
 )
