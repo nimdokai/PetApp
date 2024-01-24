@@ -97,12 +97,12 @@ class PetCategoryViewModelTest {
             delay(5000)
 
             val expectedStates = listOf(
-                PetCategoriesUiState(isLoading = false, categories = emptyList()),
-                PetCategoriesUiState(isLoading = true, categories = emptyList()),
+                PetCategoriesUiState(isLoading = false, currentConditions = emptyList()),
+                PetCategoriesUiState(isLoading = true, currentConditions = emptyList()),
                 PetCategoriesUiState(
                     isLoading = false,
-                    categories = listOf(
-                        PetCategoryItemUI(
+                    currentConditions = listOf(
+                        CurrentWeatherUi(
                             id = 0,
                             name = "name",
                             imageUrl = "imageUrl"
@@ -176,12 +176,12 @@ class PetCategoryViewModelTest {
             delay(5000)
 
             val expectedStates = listOf(
-                PetCategoriesUiState(isLoading = false, categories = emptyList()),
-                PetCategoriesUiState(isLoading = true, categories = emptyList()),
+                PetCategoriesUiState(isLoading = false, currentConditions = emptyList()),
+                PetCategoriesUiState(isLoading = true, currentConditions = emptyList()),
                 PetCategoriesUiState(
                     isLoading = false,
-                    categories = listOf(
-                        PetCategoryItemUI(
+                    currentConditions = listOf(
+                        CurrentWeatherUi(
                             id = 0,
                             name = "name",
                             imageUrl = "imageUrl"
@@ -195,4 +195,3 @@ class PetCategoryViewModelTest {
         }
 
 }
-

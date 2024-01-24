@@ -48,14 +48,15 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories) {
     }
 
     private fun setupViews() {
-        binding.categoriesRecyclerView.adapter = adapter
     }
 
     private fun observeState() {
         lifecycleScope.launchWhenStarted {
             viewModel.state.collect { state ->
-                binding.progressBar.isVisible = state.isLoading
-                adapter.submitList(state.categories)
+                with(binding) {
+                    progressBar.isVisible = state.isLoading
+                    temperature.text = state.currentConditions.temperature
+                }
             }
         }
     }
@@ -68,6 +69,7 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories) {
                         navController = findNavController(),
                         categoryID = event.categoryID
                     )
+
                     is PetCategoriesEvent.ShowError -> requireContext().showDefaultErrorDialog(
                         title = event.title,
                         message = event.message,

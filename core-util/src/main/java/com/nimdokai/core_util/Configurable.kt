@@ -5,12 +5,12 @@ import javax.inject.Inject
 
 interface Configurable {
 
-    fun getCatApiToken(): String
+    fun getAccuWeatherApiToken(): String
 
 }
 
 class BuildConfigWrapper @Inject constructor(): Configurable {
 
-    override fun getCatApiToken(): String = BuildConfig.CAT_API_KEY
+    override fun getAccuWeatherApiToken(): String = BuildConfig.ACCU_WEATHER_API_KEY
 
 }

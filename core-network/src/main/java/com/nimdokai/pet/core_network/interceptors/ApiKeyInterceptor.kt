@@ -8,12 +8,17 @@ import javax.inject.Inject
 class ApiKeyInterceptor @Inject constructor(private val configs: Configurable) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
+        val urlWithToken = chain.request().url
             .newBuilder()
-            .addHeader("x-api-key", configs.getCatApiToken())
+            .addQueryParameter("apikey", configs.getAccuWeatherApiToken())
             .build()
 
-        return chain.proceed(request)
+        val requestWithToken = chain.request()
+            .newBuilder()
+            .url(urlWithToken)
+            .build()
+
+        return chain.proceed(requestWithToken)
     }
 
 }

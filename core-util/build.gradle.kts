@@ -24,7 +24,7 @@ android {
 
         // Please make sure to add API KEY to your `local.properties` file
         // cat_api_key="API_KEY_HERE"
-        buildConfigField("String", "CAT_API_KEY", localProperties["cat_api_key"] as String)
+        buildConfigField("String", "ACCU_WEATHER_API_KEY", localProperties["accu_weather_api_key"] as String)
 
     }
 

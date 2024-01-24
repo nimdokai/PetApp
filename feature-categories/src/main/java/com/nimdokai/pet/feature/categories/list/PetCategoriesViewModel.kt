@@ -4,9 +4,10 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nimdokai.core_util.AppCoroutineDispatchers
+import com.nimdokai.pet.core.data.model.CurrentConditions
 import com.nimdokai.pet.core.resources.R
 import com.nimdokai.pet.core_domain.DomainResult.*
-import com.nimdokai.pet.core_domain.GetPetCategoriesUseCase
+import com.nimdokai.pet.core_domain.GetCurrentConditionsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,11 +18,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PetCategoriesViewModel @Inject constructor(
-    private val getCatCategoriesUseCase: GetPetCategoriesUseCase,
+    private val getCurrentConditionsUseCase: GetCurrentConditionsUseCase,
     private val dispatchers: AppCoroutineDispatchers,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(PetCategoriesUiState())
+    private val _state = MutableStateFlow(
+        PetCategoriesUiState(
+            currentConditions = CurrentWeatherUi(
+                epochTime = 0,
+                hasPrecipitation = false,
+                isDayTime = false,
+                temperature = ""
+            )
+        )
+    )
     val state: Flow<PetCategoriesUiState> = _state
 
     private val _event = MutableSharedFlow<PetCategoriesEvent>()
@@ -36,20 +46,21 @@ class PetCategoriesViewModel @Inject constructor(
         getCategories()
     }
 
-    fun onCategoryClicked(category: PetCategoryItemUI) =
+    fun onCategoryClicked(category: CurrentWeatherUi) =
         viewModelScope.launch(dispatchers.computation) {
-            _event.emit(PetCategoriesEvent.NavigateToCategoryFeed(category.id.toString()))
+            // TODO
         }
 
     private fun getCategories() = viewModelScope.launch(dispatchers.io) {
         _state.update { it.copy(isLoading = true) }
-        getCatCategoriesUseCase()
+        getCurrentConditionsUseCase()
             .collect { result ->
                 when (result) {
                     is Success -> {
-                        val categories = result.data.map { it.toUI() }
-                        _state.update { it.copy(isLoading = false, categories = categories) }
+                        val currentConditionsUi = result.data.toUi()
+                        _state.update { it.copy(isLoading = false, currentConditions = currentConditionsUi) }
                     }
+
                     NoInternet -> {
                         _event.emit(
                             PetCategoriesEvent.ShowError(
@@ -61,6 +72,7 @@ class PetCategoriesViewModel @Inject constructor(
                         )
                         _state.update { it.copy(isLoading = false) }
                     }
+
                     ServerError -> {
                         _event.emit(
                             PetCategoriesEvent.ShowError(
@@ -76,11 +88,19 @@ class PetCategoriesViewModel @Inject constructor(
             }
     }
 
+    private fun CurrentConditions.toUi(): CurrentWeatherUi = CurrentWeatherUi(
+        epochTime,
+        hasPrecipitation,
+        isDayTime,
+        temperature.value.toString(),
+    )
+
 }
+
 
 data class PetCategoriesUiState(
     val isLoading: Boolean = false,
-    val categories: List<PetCategoryItemUI> = listOf(),
+    val currentConditions: CurrentWeatherUi,
 )
 
 sealed interface PetCategoriesEvent {
@@ -92,4 +112,3 @@ sealed interface PetCategoriesEvent {
         val action: () -> Unit
     ) : PetCategoriesEvent
 }
-

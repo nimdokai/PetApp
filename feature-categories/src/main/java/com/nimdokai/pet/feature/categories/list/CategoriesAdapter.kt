@@ -10,7 +10,7 @@ import com.nimdokai.pet.feature.categories.databinding.ItemCategoryBinding
 
 internal class CategoriesAdapter(
     private val onCategoryClickedListener: ViewHolder.OnCategoryClickedListener
-) : ListAdapter<PetCategoryItemUI, CategoriesAdapter.ViewHolder>(CategoryItemDiffUtil) {
+) : ListAdapter<CurrentWeatherUi, CategoriesAdapter.ViewHolder>(CategoryItemDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
@@ -26,31 +26,31 @@ internal class CategoriesAdapter(
         private val binding: ItemCategoryBinding,
         private val onCategoryClickedListener: OnCategoryClickedListener
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: PetCategoryItemUI) {
+        fun bind(item: CurrentWeatherUi) {
             binding.apply {
-                categoryTitle.text = item.name
-                categoryImage.load(item.imageUrl)
-                root.setOnClickListener { onCategoryClickedListener.onClicked(item) }
+//                categoryTitle.text = item.name
+//                categoryImage.load(item.imageUrl)
+//                root.setOnClickListener { onCategoryClickedListener.onClicked(item) }
             }
         }
 
         fun interface OnCategoryClickedListener {
-            fun onClicked(category: PetCategoryItemUI)
+            fun onClicked(category: CurrentWeatherUi)
         }
     }
 
-    private object CategoryItemDiffUtil : DiffUtil.ItemCallback<PetCategoryItemUI>() {
+    private object CategoryItemDiffUtil : DiffUtil.ItemCallback<CurrentWeatherUi>() {
 
         override fun areItemsTheSame(
-            oldItem: PetCategoryItemUI,
-            newItem: PetCategoryItemUI,
+            oldItem: CurrentWeatherUi,
+            newItem: CurrentWeatherUi,
         ): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: PetCategoryItemUI,
-            newItem: PetCategoryItemUI,
+            oldItem: CurrentWeatherUi,
+            newItem: CurrentWeatherUi,
         ): Boolean {
             return oldItem == newItem
         }

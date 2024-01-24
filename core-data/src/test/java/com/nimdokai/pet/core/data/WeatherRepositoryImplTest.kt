@@ -16,7 +16,7 @@ import org.junit.Test
 import retrofit2.Response
 import java.io.IOException
 
-class CatRepositoryTest {
+class WeatherRepositoryImplTest {
 
     private lateinit var repository: PetRepository
     private val fakePetApi = FakePetApi()
@@ -221,5 +221,3 @@ class CatRepositoryTest {
             Assert.assertEquals(DataResponse.NoInternet, images)
         }
 }
-
-

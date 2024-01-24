@@ -2,6 +2,7 @@ package com.nimdokai.pet.core_network.di
 
 import android.content.Context
 import com.nimdokai.pet.core_network.ApiConstants
+import com.nimdokai.pet.core_network.api.AccuWeatherApi
 import com.nimdokai.pet.core_network.api.PetApi
 import com.nimdokai.pet.core_network.interceptors.ApiKeyInterceptor
 import com.nimdokai.pet.core_network.interceptors.ForceCacheInterceptor
@@ -26,7 +27,7 @@ interface NetworkModuleBinder {
 
     @Singleton
     @Binds
-    @CatApiKey
+    @WeatherApiKey
     fun bindApiKeyInterceptor(impl: ApiKeyInterceptor): Interceptor
 
     @Singleton
@@ -48,13 +49,13 @@ object NetworkModuleProvider {
     @Provides
     @Singleton
     fun provideHttpClientAuthenticated(
-        @CatApiKey catApiKey: Interceptor,
+        @WeatherApiKey apiKey: Interceptor,
         @LoggingOkHttpInterceptor logging: Interceptor,
         @CacheInterceptor cacheInterceptor: Interceptor,
         cache: Cache,
     ): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(catApiKey)
+            .addInterceptor(apiKey)
             .addInterceptor(logging)
             .addInterceptor(cacheInterceptor)
             .cache(cache)
@@ -74,6 +75,10 @@ object NetworkModuleProvider {
     @Singleton
     fun providePetApi(retrofit: Retrofit): PetApi = retrofit.create((PetApi::class.java))
 
+    @Provides
+    @Singleton
+    fun providesWeatherApi(retrofit: Retrofit): AccuWeatherApi = retrofit.create((AccuWeatherApi::class.java))
+
     @LoggingOkHttpInterceptor
     @Provides
     @Singleton
@@ -86,10 +91,10 @@ object NetworkModuleProvider {
 }
 
 @Qualifier
-internal annotation class CatApiKey
+internal annotation class WeatherApiKey
 @Qualifier
 internal annotation class LoggingOkHttpInterceptor
 @Qualifier
 internal annotation class CacheInterceptor
 
-private const val CACHE_SIZE = 20L * 1024 * 1024 // 20 MB
+private const val CACHE_SIZE = 5L * 1024 * 1024 // 5 MB

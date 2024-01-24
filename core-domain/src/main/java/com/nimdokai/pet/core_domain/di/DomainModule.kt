@@ -19,4 +19,7 @@ interface DomainModule {
     @Binds
     fun bindGetCatDetailsUseCase(impl: GetCatDetailsUseCase): GetPetDetailsUseCase
 
+    @Binds
+    fun bindGetCurrentConditionsUseCase(impl: GetCurrentConditionsUseCaseImpl): GetCurrentConditionsUseCase
+
 }
