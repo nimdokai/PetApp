@@ -12,7 +12,8 @@ interface AccuWeatherApi {
 
     @GET("currentconditions/v1/{locationId}")
     suspend fun getCurrentConditionsForLocation(
-        @Path("locationId") locationId: String
+        @Path("locationId") locationId: String,
+        @Query("details") details: Boolean = true,
     ): Response<List<CurrentConditionsJsonResponse>>
 
     @GET("forecasts/v1/hourly/12hour/{locationId}")

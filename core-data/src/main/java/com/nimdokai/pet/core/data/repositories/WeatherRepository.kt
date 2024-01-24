@@ -10,7 +10,7 @@ import com.nimdokai.pet.core_network.api.AccuWeatherApi
 import com.nimdokai.pet.core_network.model.CurrentConditionsJsonResponse
 import com.nimdokai.pet.core_network.model.DailyForecastItemJsonResponse
 import com.nimdokai.pet.core_network.model.HourlyForecastJsonResponse
-import com.nimdokai.pet.core_network.model.TemperatureHolderJsonResponse
+import com.nimdokai.pet.core_network.model.AvailableUnitTypesHolderJsonResponse
 import javax.inject.Inject
 
 interface WeatherRepository {
@@ -74,11 +74,11 @@ class WeatherRepositoryImpl @Inject constructor(
             epochTime = epochTime,
             hasPrecipitation = hasPrecipitation,
             isDayTime = isDayTime,
-            temperature = temperatureHolder.toDataModel(unit)
+            temperature = temperature.toDataModel(unit)
         )
     }
 
-    private fun TemperatureHolderJsonResponse.toDataModel(unit: String): Temperature {
+    private fun AvailableUnitTypesHolderJsonResponse.toDataModel(unit: String): Temperature {
         return when (unit) {
             "F" -> Temperature.Fahrenheit(imperial.value)
             else -> Temperature.Celsius(metric.value)

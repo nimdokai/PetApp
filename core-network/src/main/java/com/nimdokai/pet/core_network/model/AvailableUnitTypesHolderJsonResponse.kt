@@ -3,9 +3,9 @@ package com.nimdokai.pet.core_network.model
 
 import com.google.gson.annotations.SerializedName
 
-data class TemperatureHolderJsonResponse(
+data class AvailableUnitTypesHolderJsonResponse(
     @SerializedName("Imperial")
-    val imperial: TemperatureJsonResponse,
+    val imperial: MeasureUnitJsonResponse,
     @SerializedName("Metric")
-    val metric: TemperatureJsonResponse
+    val metric: MeasureUnitJsonResponse
 )

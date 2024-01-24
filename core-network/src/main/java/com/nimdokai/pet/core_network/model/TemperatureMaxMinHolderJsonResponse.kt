@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class TemperatureMaxMinHolderJsonResponse(
     @SerializedName("Maximum")
-    val maximum: TemperatureJsonResponse,
+    val maximum: MeasureUnitJsonResponse,
     @SerializedName("Minimum")
-    val minimum: TemperatureJsonResponse
+    val minimum: MeasureUnitJsonResponse
 )

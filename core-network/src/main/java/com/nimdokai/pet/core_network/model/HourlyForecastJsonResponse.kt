@@ -21,7 +21,7 @@ data class HourlyForecastJsonResponse(
     @SerializedName("PrecipitationProbability")
     val precipitationProbability: Int,
     @SerializedName("Temperature")
-    val temperature: TemperatureJsonResponse,
+    val temperature: MeasureUnitJsonResponse,
     @SerializedName("WeatherIcon")
     val weatherIcon: Int
 )
