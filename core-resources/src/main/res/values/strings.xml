@@ -26,5 +26,6 @@
     <string name="dialog_server_error_retry">Retry</string>
     <string name="temperature_high">High: %s</string>
     <string name="temperature_low">Low: %s</string>
+    <string name="hourly_forecast">Hourly forecast</string>
 
 </resources>

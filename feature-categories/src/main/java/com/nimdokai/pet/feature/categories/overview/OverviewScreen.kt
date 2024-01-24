@@ -1,15 +1,19 @@
 package com.nimdokai.pet.feature.categories.overview
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,11 +29,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nimdokai.pet.core.resources.R
 import com.nimdokai.pet.core.resources.UnicodeDegreeSings
-import com.nimdokai.pet.feature.categories.list.CurrentConditionsUiState
+import com.nimdokai.pet.core.resources.theme.Dimens
 import com.nimdokai.pet.feature.categories.list.CurrentWeatherUi
 import com.nimdokai.pet.feature.categories.list.HourlyForecastUi
-import com.nimdokai.pet.feature.categories.list.HourlyForecastUiState
-import com.nimdokai.pet.feature.categories.list.OverviewViewModel
 
 @Composable
 fun OverviewScreen(
@@ -38,16 +40,34 @@ fun OverviewScreen(
 ) {
     val currentConditionsUiState by viewModel.currentConditionsUiState.collectAsState()
     val hourlyForecastUiState by viewModel.hourlyForecastUiState.collectAsState()
-    Column {
+    Column(modifier = modifier
+        .fillMaxSize()
+        .background(MaterialTheme.colorScheme.background)) {
         CurrentConditionsCard(modifier, currentConditionsUiState)
-        HourlyForecastList(modifier, hourlyForecastUiState)
+        HourlyForecast(modifier, hourlyForecastUiState)
     }
 
 }
 
 @Composable
+fun HourlyForecast(modifier: Modifier, hourlyForecastUiState: HourlyForecastUiState) {
+    Column(
+        modifier = modifier.padding(Dimens.m)
+    ) {
+        Text(
+            modifier = modifier.padding(top = Dimens.m, bottom = Dimens.xs),
+            text = stringResource(id = hourlyForecastUiState.title)
+        )
+        HourlyForecastList(modifier, hourlyForecastUiState)
+    }
+}
+
+@Composable
 fun HourlyForecastList(modifier: Modifier, hourlyForecastUiState: HourlyForecastUiState) {
-    LazyRow(modifier = modifier.padding(16.dp)) {
+    LazyRow(modifier = modifier
+        .background(MaterialTheme.colorScheme.secondary, MaterialTheme.shapes.small)
+        .padding(vertical = Dimens.xs)
+    ) {
         items(hourlyForecastUiState.forecasts) {
             HourlyForecastCard(modifier, it)
         }
@@ -56,7 +76,7 @@ fun HourlyForecastList(modifier: Modifier, hourlyForecastUiState: HourlyForecast
 
 @Composable
 fun HourlyForecastCard(modifier: Modifier, forecastUi: HourlyForecastUi) {
-    Column(modifier = modifier.padding(horizontal = 4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier = modifier.padding(horizontal = Dimens.xs), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(text = forecastUi.temperature)
         Image(
             painter = painterResource(id = forecastUi.icon),
@@ -70,7 +90,7 @@ fun HourlyForecastCard(modifier: Modifier, forecastUi: HourlyForecastUi) {
 @Composable
 fun CurrentConditionsCard(modifier: Modifier = Modifier, currentConditionsUiState: CurrentConditionsUiState) {
     val currentConditions = currentConditionsUiState.currentConditions
-    Column(modifier = modifier.padding(16.dp)) {
+    Column(modifier = modifier.padding(Dimens.m)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -106,7 +126,7 @@ fun CurrentConditionsCard(modifier: Modifier = Modifier, currentConditionsUiStat
             Text(
                 fontSize = 14.sp,
                 text = stringResource(id = R.string.temperature_high, currentConditions.pastMaxTemp),
-                modifier = Modifier.padding(end = 8.dp)
+                modifier = Modifier.padding(end = Dimens.xs)
             )
             Text(
                 fontSize = 14.sp,
@@ -140,11 +160,12 @@ fun PreviewCurrentConditionsCard() {
 
 @Preview
 @Composable
-fun PreviewHourlyForecastList() {
-    HourlyForecastList(
+fun PreviewHourlyForecast() {
+    HourlyForecast(
         modifier = Modifier,
         hourlyForecastUiState = HourlyForecastUiState(
             isLoading = false,
+            title = R.string.hourly_forecast,
             forecasts = listOf(
                 HourlyForecastUi(
                     temperature = "20${UnicodeDegreeSings.Celsius}",

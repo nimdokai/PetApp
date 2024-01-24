@@ -1,4 +1,4 @@
-package com.nimdokai.pet.feature.categories.list
+package com.nimdokai.pet.feature.categories.overview
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
@@ -17,6 +17,9 @@ import com.nimdokai.pet.core_domain.DomainResult.ServerError
 import com.nimdokai.pet.core_domain.DomainResult.Success
 import com.nimdokai.pet.core_domain.GetCurrentConditionsUseCase
 import com.nimdokai.pet.core_domain.GetHourlyForecastUseCase
+import com.nimdokai.pet.feature.categories.list.CurrentWeatherUi
+import com.nimdokai.pet.feature.categories.list.HourlyForecastUi
+import com.nimdokai.pet.feature.categories.list.emptyCurrentWeatherUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -57,6 +60,7 @@ class OverviewViewModel @Inject constructor(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = HourlyForecastUiState(
+                    title = R.string.hourly_forecast,
                     forecasts = emptyList(),
                     isLoading = true
                 )
@@ -180,6 +184,7 @@ data class CurrentConditionsUiState(
 )
 
 data class HourlyForecastUiState(
+    @StringRes val title: Int,
     val isLoading: Boolean = false,
     val forecasts: List<HourlyForecastUi>,
 )

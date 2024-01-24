@@ -11,6 +11,8 @@ import com.nimdokai.core_util.viewBinding
 import com.nimdokai.pet.core.resources.views.showDefaultErrorDialog
 import com.nimdokai.pet.feature.categories.R
 import com.nimdokai.pet.feature.categories.databinding.FragmentCategoriesBinding
+import com.nimdokai.pet.feature.categories.overview.OverviewViewModel
+import com.nimdokai.pet.feature.categories.overview.PetCategoriesEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.cancelChildren
 import javax.inject.Inject
