@@ -136,5 +136,6 @@ internal fun DailyForecastItemJsonResponse.toDataModel(useMetric: Boolean): Dail
         epochDate,
         dayTemperature,
         nightTemperature,
+        day.icon
     )
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.nimdokai.core_util.AppCoroutineDispatchers
 import com.nimdokai.core_util.date.DateFormatter
 import com.nimdokai.pet.core.data.model.CurrentConditions
+import com.nimdokai.pet.core.data.model.DailyForecast
 import com.nimdokai.pet.core.data.model.HourlyForecast
 import com.nimdokai.pet.core.data.model.Temperature
 import com.nimdokai.pet.core.resources.R
@@ -16,8 +17,10 @@ import com.nimdokai.pet.core_domain.DomainResult.NoInternet
 import com.nimdokai.pet.core_domain.DomainResult.ServerError
 import com.nimdokai.pet.core_domain.DomainResult.Success
 import com.nimdokai.pet.core_domain.GetCurrentConditionsUseCase
+import com.nimdokai.pet.core_domain.GetDailyForecastUseCase
 import com.nimdokai.pet.core_domain.GetHourlyForecastUseCase
 import com.nimdokai.pet.feature.categories.list.CurrentWeatherUi
+import com.nimdokai.pet.feature.categories.list.DailyForecastUi
 import com.nimdokai.pet.feature.categories.list.HourlyForecastUi
 import com.nimdokai.pet.feature.categories.list.emptyCurrentWeatherUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,6 +38,7 @@ class OverviewViewModel @Inject constructor(
     private val dispatchers: AppCoroutineDispatchers,
     getCurrentConditionsUseCase: GetCurrentConditionsUseCase,
     getHourlyForecastUseCase: GetHourlyForecastUseCase,
+    getDailyForecastUseCase: GetDailyForecastUseCase,
     private val dateFormatter: DateFormatter
 ) : ViewModel() {
 
@@ -61,6 +65,19 @@ class OverviewViewModel @Inject constructor(
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = HourlyForecastUiState(
                     title = R.string.hourly_forecast,
+                    forecasts = emptyList(),
+                    isLoading = true
+                )
+            )
+
+    val dailyForecastUiState: StateFlow<DailyForecastUiState> =
+        getDailyForecastUseCase()
+            .map(::mapDailyForecastResult)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = DailyForecastUiState(
+                    title = R.string.daily_forecast,
                     forecasts = emptyList(),
                     isLoading = true
                 )
@@ -122,6 +139,28 @@ class OverviewViewModel @Inject constructor(
         }
     }
 
+    private suspend fun mapDailyForecastResult(result: DomainResult<out List<DailyForecast>>): DailyForecastUiState {
+        return when (result) {
+            is Success -> {
+                val dailyForecastUi = result.data.map { it.toUi() }
+                dailyForecastUiState.value.copy(
+                    isLoading = false,
+                    forecasts = dailyForecastUi
+                )
+            }
+
+            NoInternet -> {
+                onNoInternet(::onRetryGetCategories)
+                dailyForecastUiState.value.copy(isLoading = false)
+            }
+
+            ServerError -> {
+                onServerError(::onRetryGetCategories)
+                dailyForecastUiState.value.copy(isLoading = false)
+            }
+        }
+    }
+
     private suspend fun onServerError(onRetry: () -> Unit) {
         _event.emit(
             PetCategoriesEvent.ShowError(
@@ -157,6 +196,15 @@ class OverviewViewModel @Inject constructor(
         )
     }
 
+    private fun DailyForecast.toUi(): DailyForecastUi {
+        return DailyForecastUi(
+            temperature = addMeasureUnitTo(this.dayTemperature) + "/" + addMeasureUnitTo(this.nightTemperature),
+
+            title = if (dateFormatter.isToday(epochDate)) "today" else dateFormatter.format(this.epochDate, "dddd"),
+            icon = getWeatherIcon(weatherType),
+        )
+    }
+
     private fun addMeasureUnitTo(temperature: Temperature): String {
         val unit = when (temperature) {
             is Temperature.Celsius -> UnicodeDegreeSings.Celsius
@@ -187,6 +235,12 @@ data class HourlyForecastUiState(
     @StringRes val title: Int,
     val isLoading: Boolean = false,
     val forecasts: List<HourlyForecastUi>,
+)
+
+data class DailyForecastUiState(
+    @StringRes val title: Int,
+    val isLoading: Boolean = false,
+    val forecasts: List<DailyForecastUi>,
 )
 
 sealed interface PetCategoriesEvent {

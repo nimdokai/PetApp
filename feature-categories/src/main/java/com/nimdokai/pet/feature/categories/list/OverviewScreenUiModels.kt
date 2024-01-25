@@ -1,6 +1,7 @@
 package com.nimdokai.pet.feature.categories.list
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 
 data class CurrentWeatherUi(
     val epochTime: Int,
@@ -27,5 +28,11 @@ val emptyCurrentWeatherUiState = CurrentWeatherUi(
 data class HourlyForecastUi(
     val temperature: String,
     val time: String,
+    @DrawableRes val icon: Int,
+)
+
+data class DailyForecastUi(
+    val title: String,
+    val temperature: String,
     @DrawableRes val icon: Int,
 )

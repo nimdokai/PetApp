@@ -9,5 +9,7 @@ data class DayJsonResponse(
     @SerializedName("PrecipitationIntensity")
     val precipitationIntensity: String,
     @SerializedName("PrecipitationType")
-    val precipitationType: String
+    val precipitationType: String,
+    @SerializedName("Icon")
+    val icon: Int,
 )

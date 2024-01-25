@@ -9,10 +9,10 @@ import javax.inject.Inject
 
 class Get5DayForecastUseCaseImpl @Inject constructor(
     private val repo: WeatherRepository
-) : Get5DayForecastUseCase {
+) : GetDailyForecastUseCase {
 
     //ToDo is is correct to create a flow every time?
-    override suspend fun invoke(): Flow<DomainResult<out List<DailyForecast>>> = flow {
+    override fun invoke(): Flow<DomainResult<out List<DailyForecast>>> = flow {
 
         // ToDo pass the location
         val locationId = "326967"
