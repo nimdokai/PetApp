@@ -10,7 +10,7 @@ plugins {
 }
 
 val localProperties = Properties()
-localProperties.load(FileInputStream(File(rootProject.projectDir, "local.properties")))
+localProperties.load(project.rootProject.file("local.properties").inputStream())
 
 android {
     namespace = "com.nimdokai.pet.core.util"
@@ -23,9 +23,8 @@ android {
         consumerProguardFiles("consumer-rules.pro")
 
         // Please make sure to add API KEY to your `local.properties` file
-        // cat_api_key="API_KEY_HERE"
+        // accu_weather_api_key="API_KEY_HERE"
         buildConfigField("String", "ACCU_WEATHER_API_KEY", localProperties["accu_weather_api_key"] as String)
-
     }
 
     compileOptions {
