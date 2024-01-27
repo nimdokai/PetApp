@@ -44,7 +44,7 @@ class WeatherRepositoryImpl @Inject constructor(
         return tryCall(
             { accuWeatherApi.getCurrentConditionsForLocation(locationId) }
         ) {
-            // this contain single element array
+            // this contains single element array
             it.first().toDataModel(temperatureUnit)
         }
     }
