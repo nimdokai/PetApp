@@ -1,0 +1,33 @@
+name: Build Debug
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  build-app:
+    runs-on: [ ubuntu-latest ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref }}
+
+      - name: Setup Android
+        uses: ./.github/actions/set-android-environment
+
+      - name: Set API key in local.properties
+        run: |
+          echo "accu_weather_api_key=${{ secrets.ACCU_WEATHER_API_KEY }}" > local.properties
+          cat local.properties
+
+      - name: Execute Debug build
+        run: ./gradlew assembleDebug --scan
