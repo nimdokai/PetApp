@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nimdokai.pet.core.resources.R
 import com.nimdokai.pet.core.resources.UnicodeDegreeSings
+import com.nimdokai.pet.core.resources.theme.AppTheme
 import com.nimdokai.pet.core.resources.theme.Dimens
 import com.nimdokai.pet.feature.categories.list.CurrentWeatherUi
 import com.nimdokai.pet.feature.categories.list.DailyForecastUi
@@ -44,9 +46,7 @@ fun OverviewScreen(
     val hourlyForecastUiState by viewModel.hourlyForecastUiState.collectAsState()
     val dailyForecastUiState by viewModel.dailyForecastUiState.collectAsState()
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+        modifier = modifier.fillMaxSize()
     ) {
         CurrentConditionsCard(modifier, currentConditionsUiState)
         HourlyForecast(modifier, hourlyForecastUiState)
@@ -69,9 +69,8 @@ fun CurrentConditionsCard(modifier: Modifier = Modifier, currentConditionsUiStat
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    fontSize = 40.sp,
-                    fontWeight = FontWeight.Bold,
-                    text = currentConditions.temperature
+                    style = MaterialTheme.typography.headlineLarge,
+                    text = currentConditions.temperature,
                 )
                 if (currentConditions.icon != 0) {
                     Image(
@@ -85,20 +84,20 @@ fun CurrentConditionsCard(modifier: Modifier = Modifier, currentConditionsUiStat
                 modifier = Modifier.wrapContentHeight()
             ) {
                 Text(
-                    fontSize = 20.sp,
-                    text = currentConditions.description
+                    text = currentConditions.description,
+                    style = MaterialTheme.typography.bodyLarge,
                 )
             }
         }
 
         Row {
             Text(
-                fontSize = 14.sp,
+                style = MaterialTheme.typography.bodyLarge,
                 text = stringResource(id = R.string.temperature_high, currentConditions.pastMaxTemp),
                 modifier = Modifier.padding(end = Dimens.xs)
             )
             Text(
-                fontSize = 14.sp,
+                style = MaterialTheme.typography.bodyLarge,
                 text = stringResource(id = R.string.temperature_low, currentConditions.pastMinTemp)
             )
         }
@@ -122,7 +121,7 @@ fun HourlyForecast(modifier: Modifier, hourlyForecastUiState: HourlyForecastUiSt
 fun HourlyForecastList(modifier: Modifier, hourlyForecastUiState: HourlyForecastUiState) {
     LazyRow(
         modifier = modifier
-            .background(MaterialTheme.colorScheme.secondary, MaterialTheme.shapes.small)
+            .background(MaterialTheme.colorScheme.tertiaryContainer, MaterialTheme.shapes.small)
             .padding(vertical = Dimens.xs)
     ) {
         items(hourlyForecastUiState.forecasts) {
@@ -171,10 +170,12 @@ fun DailyForecastList(modifier: Modifier, dailyForecastUiState: DailyForecastUiS
 
 @Composable
 fun DailyForecastCard(modifier: Modifier, dailyForecastUi: DailyForecastUi) {
-    Row(modifier = modifier
-        .padding(vertical = Dimens.xxxs)
-        .background(MaterialTheme.colorScheme.secondary, MaterialTheme.shapes.small),
-        verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = modifier
+            .padding(vertical = Dimens.xxxs)
+            .background(MaterialTheme.colorScheme.tertiaryContainer, MaterialTheme.shapes.small),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Text(
             modifier = modifier
                 .weight(1f)
@@ -198,7 +199,7 @@ fun DailyForecastCard(modifier: Modifier, dailyForecastUi: DailyForecastUi) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun PreviewCurrentConditionsCard() {
     CurrentConditionsCard(
@@ -219,7 +220,7 @@ fun PreviewCurrentConditionsCard() {
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun PreviewHourlyForecast() {
     HourlyForecast(
@@ -273,7 +274,8 @@ fun PreviewHourlyForecast() {
     )
 }
 
-@Preview
+
+@Preview(showBackground = true)
 @Composable
 fun PreviewDailyForecast() {
     DailyForecast(
