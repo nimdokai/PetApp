@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,19 +22,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nimdokai.pet.core.resources.R
 import com.nimdokai.pet.core.resources.UnicodeDegreeSings
-import com.nimdokai.pet.core.resources.theme.AppTheme
 import com.nimdokai.pet.core.resources.theme.Dimens
-import com.nimdokai.pet.feature.categories.list.CurrentWeatherUi
-import com.nimdokai.pet.feature.categories.list.DailyForecastUi
-import com.nimdokai.pet.feature.categories.list.HourlyForecastUi
 
 @Composable
 fun OverviewScreen(
@@ -69,7 +62,7 @@ fun CurrentConditionsCard(modifier: Modifier = Modifier, currentConditionsUiStat
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    style = MaterialTheme.typography.headlineLarge,
+                    style = MaterialTheme.typography.displayLarge,
                     text = currentConditions.temperature,
                 )
                 if (currentConditions.icon != 0) {
@@ -110,6 +103,7 @@ fun HourlyForecast(modifier: Modifier, hourlyForecastUiState: HourlyForecastUiSt
         modifier = modifier.padding(Dimens.m)
     ) {
         Text(
+            style = MaterialTheme.typography.bodyLarge,
             modifier = modifier.padding(top = Dimens.m, bottom = Dimens.xs),
             text = stringResource(id = hourlyForecastUiState.title)
         )
@@ -133,13 +127,19 @@ fun HourlyForecastList(modifier: Modifier, hourlyForecastUiState: HourlyForecast
 @Composable
 fun HourlyForecastCard(modifier: Modifier, forecastUi: HourlyForecastUi) {
     Column(modifier = modifier.padding(horizontal = Dimens.xs), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = forecastUi.temperature)
+        Text(
+            style = MaterialTheme.typography.bodyMedium,
+            text = forecastUi.temperature
+        )
         Image(
             painter = painterResource(id = forecastUi.icon),
             contentDescription = "Weather icon",
             modifier = Modifier.size(40.dp)
         )
-        Text(text = forecastUi.time)
+        Text(
+            style = MaterialTheme.typography.bodyMedium,
+            text = forecastUi.time
+        )
     }
 }
 
@@ -150,7 +150,8 @@ fun DailyForecast(modifier: Modifier, dailyForecastUiState: DailyForecastUiState
     ) {
         Text(
             modifier = modifier.padding(top = Dimens.m, bottom = Dimens.xs),
-            text = stringResource(id = dailyForecastUiState.title)
+            text = stringResource(id = dailyForecastUiState.title),
+            style = MaterialTheme.typography.bodyLarge,
         )
         DailyForecastList(modifier, dailyForecastUiState)
     }
@@ -177,6 +178,7 @@ fun DailyForecastCard(modifier: Modifier, dailyForecastUi: DailyForecastUi) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
+            style = MaterialTheme.typography.bodyMedium,
             modifier = modifier
                 .weight(1f)
                 .padding(horizontal = Dimens.xs),
@@ -190,6 +192,7 @@ fun DailyForecastCard(modifier: Modifier, dailyForecastUi: DailyForecastUi) {
                 .padding(horizontal = Dimens.xs)
         )
         Text(
+            style = MaterialTheme.typography.bodyMedium,
             modifier = modifier
                 .weight(1f)
                 .padding(horizontal = Dimens.xs),

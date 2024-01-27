@@ -9,7 +9,6 @@ import com.nimdokai.core_util.navigation.PetDetailsNavigator.PetDetailsArgs
 import com.nimdokai.core_util.navigation.getArgs
 import com.nimdokai.pet.core.resources.R
 import com.nimdokai.pet.core_domain.DomainResult
-import com.nimdokai.pet.core_domain.GetPetDetailsUseCase
 import com.nimdokai.pet.core_domain.model.PetDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

@@ -47,7 +47,6 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.kotlinx.viewbinding)
     implementation(libs.androidx.navigation.runtime.ktx)
-    implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 
     implementation(libs.kotlinx.coroutines.android)

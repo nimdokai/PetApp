@@ -2,11 +2,9 @@
 
 package com.nimdokai.pet.core.data
 
-import com.nimdokai.pet.core.data.model.PetCategoryResponse
-import com.nimdokai.pet.core.data.model.PetImageResponse
-import com.nimdokai.pet.core.testing.fakes.FakePetApi
+import com.nimdokai.pet.core.data.repositories.WeatherRepository
+import com.nimdokai.pet.core.data.repositories.WeatherRepositoryImpl
 import com.nimdokai.pet.core_network.model.PetCategoryJson
-import com.nimdokai.pet.core_network.model.PetImageJson
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -18,12 +16,12 @@ import java.io.IOException
 
 class WeatherRepositoryImplTest {
 
-    private lateinit var repository: PetRepository
-    private val fakePetApi = FakePetApi()
+    private lateinit var repository: WeatherRepository
+    private val fakePetApi = FakeWeatherApi()
 
     @Before
     fun setUp() {
-        repository = CatRepository(fakePetApi)
+        repository = WeatherRepositoryImpl(fakePetApi)
     }
 
     @Test

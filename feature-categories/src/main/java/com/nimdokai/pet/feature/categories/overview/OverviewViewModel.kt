@@ -19,10 +19,6 @@ import com.nimdokai.pet.core_domain.DomainResult.Success
 import com.nimdokai.pet.core_domain.GetCurrentConditionsUseCase
 import com.nimdokai.pet.core_domain.GetDailyForecastUseCase
 import com.nimdokai.pet.core_domain.GetHourlyForecastUseCase
-import com.nimdokai.pet.feature.categories.list.CurrentWeatherUi
-import com.nimdokai.pet.feature.categories.list.DailyForecastUi
-import com.nimdokai.pet.feature.categories.list.HourlyForecastUi
-import com.nimdokai.pet.feature.categories.list.emptyCurrentWeatherUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -198,9 +194,9 @@ class OverviewViewModel @Inject constructor(
 
     private fun DailyForecast.toUi(): DailyForecastUi {
         return DailyForecastUi(
-            temperature = addMeasureUnitTo(this.dayTemperature) + "/" + addMeasureUnitTo(this.nightTemperature),
+            temperature = addMeasureUnitTo(this.dayTemperature) + " / " + addMeasureUnitTo(this.nightTemperature),
 
-            title = if (dateFormatter.isToday(epochDate)) "today" else dateFormatter.format(this.epochDate, "dddd"),
+            title = if (dateFormatter.isToday(epochDate)) "today" else dateFormatter.format(this.epochDate, "EEEE"),
             icon = getWeatherIcon(weatherType),
         )
     }

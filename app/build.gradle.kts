@@ -43,7 +43,6 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
         compose = true
     }
 
@@ -61,14 +60,11 @@ dependencies {
     implementation(project(":core-util"))
     androidTestImplementation(project(":core-testing"))
     implementation(project(":feature-categories"))
-    implementation(project(":feature-petdetails"))
 
     // Core Android dependencies
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.foundation)

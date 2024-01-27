@@ -3,7 +3,6 @@ package com.nimdokai.pet.core_network.di
 import android.content.Context
 import com.nimdokai.pet.core_network.ApiConstants
 import com.nimdokai.pet.core_network.api.AccuWeatherApi
-import com.nimdokai.pet.core_network.api.PetApi
 import com.nimdokai.pet.core_network.interceptors.ApiKeyInterceptor
 import com.nimdokai.pet.core_network.interceptors.ForceCacheInterceptor
 import dagger.Binds
@@ -70,10 +69,6 @@ object NetworkModuleProvider {
             .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-
-    @Provides
-    @Singleton
-    fun providePetApi(retrofit: Retrofit): PetApi = retrofit.create((PetApi::class.java))
 
     @Provides
     @Singleton

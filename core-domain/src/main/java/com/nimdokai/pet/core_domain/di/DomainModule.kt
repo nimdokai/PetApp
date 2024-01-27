@@ -11,15 +11,6 @@ import dagger.hilt.android.components.ViewModelComponent
 interface DomainModule {
 
     @Binds
-    fun bindGetPetCategoriesUseCase(impl: GetCatCategoriesUseCase): GetPetCategoriesUseCase
-
-    @Binds
-    fun bindGetCatCategoryFeedUseCase(impl: GetCatCategoryFeedUseCase): GetPetCategoryFeedUseCase
-
-    @Binds
-    fun bindGetCatDetailsUseCase(impl: GetCatDetailsUseCase): GetPetDetailsUseCase
-
-    @Binds
     fun bindGetCurrentConditionsUseCase(impl: GetCurrentConditionsUseCaseImpl): GetCurrentConditionsUseCase
 
     @Binds

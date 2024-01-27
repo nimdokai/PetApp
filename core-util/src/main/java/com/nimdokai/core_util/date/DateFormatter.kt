@@ -1,15 +1,13 @@
 package com.nimdokai.core_util.date
 
 import android.annotation.SuppressLint
-import android.icu.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 interface DateFormatter {
     fun formatOnlyHourIfToday(date: String): String
-    fun format(epochTime: Int, outPutFormat: String): String
+    fun format(epochTime: Int, outputFormat: String): String
     fun isToday(epochDate: Int): Boolean
 }
 
@@ -34,10 +32,10 @@ internal object DateFormatterDefault : DateFormatter {
         return timeFormat.format(parsedDate)
     }
 
-    override fun format(epochTime: Int, outPutFormat: String): String {
+    override fun format(epochTime: Int, outputFormat: String): String {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = epochTime * 1000L
-        val dateFormat = SimpleDateFormat(outPutFormat, Locale.getDefault())
+        val dateFormat = SimpleDateFormat(outputFormat, Locale.getDefault())
         return dateFormat.format(calendar.time)
     }
 
