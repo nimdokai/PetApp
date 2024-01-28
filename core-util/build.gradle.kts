@@ -1,5 +1,4 @@
 import java.util.Properties
-import java.io.FileInputStream
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
