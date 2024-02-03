@@ -1,5 +1,9 @@
 package com.nimdokai.pet.feature.categories.overview
 
+import android.Manifest
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,16 +20,22 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.nimdokai.core_util.findActivity
+import com.nimdokai.core_util.openAppSettings
+import com.nimdokai.pet.core.resources.LocationPermissionTextProvider
+import com.nimdokai.pet.core.resources.PermissionDialog
 import com.nimdokai.pet.core.resources.R
 import com.nimdokai.pet.core.resources.UnicodeDegreeSings
 import com.nimdokai.pet.core.resources.theme.Dimens
@@ -35,19 +45,74 @@ fun OverviewScreen(
     modifier: Modifier = Modifier,
     viewModel: OverviewViewModel = hiltViewModel()
 ) {
-    val currentConditionsUiState by viewModel.currentConditionsUiState.collectAsState()
-    val hourlyForecastUiState by viewModel.hourlyForecastUiState.collectAsState()
-    val dailyForecastUiState by viewModel.dailyForecastUiState.collectAsState()
+    val locationPermissionResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            viewModel.onPermissionResult(
+                permission = Manifest.permission.ACCESS_COARSE_LOCATION,
+                isGranted = isGranted
+            )
+        }
+    )
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    HandleEvent(
+        state = state,
+        viewModel = viewModel,
+        locationPermissionResultLauncher = locationPermissionResultLauncher
+    )
+
     Column(
         modifier = modifier.fillMaxSize()
     ) {
-        CurrentConditionsCard(modifier, currentConditionsUiState)
-        HourlyForecast(modifier, hourlyForecastUiState)
-        DailyForecast(modifier, dailyForecastUiState)
+        CurrentConditionsCard(modifier, state.currentConditionsUiState)
+        HourlyForecast(modifier, state.hourlyForecastUiState)
+        DailyForecast(modifier, state.dailyForecastUiState)
     }
 
 }
 
+@Composable
+private fun HandleEvent(
+    state: OverviewState,
+    viewModel: OverviewViewModel,
+    locationPermissionResultLauncher: ManagedActivityResultLauncher<String, Boolean>
+) {
+    when (state.event) {
+        OverviewEvent.RequestLocationPermission -> {
+            RequestLocationPermission(locationPermissionResultLauncher)
+            viewModel.onEventConsumed()
+        }
+        is OverviewEvent.NavigateToDayDetails -> TODO()
+        is OverviewEvent.ShowError -> TODO()
+        OverviewEvent.GoToAppSettings -> {
+            LocalContext.current.findActivity().openAppSettings()
+            viewModel.onEventConsumed()
+        }
+
+        is OverviewEvent.ShowPermissionDialog -> ShowLocationPermissionDialog(viewModel)
+        OverviewEvent.Empty -> return
+    }
+}
+
+@Composable
+private fun RequestLocationPermission(locationPermissionResultLauncher: ManagedActivityResultLauncher<String, Boolean>) {
+    locationPermissionResultLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+}
+
+@Composable
+private fun ShowLocationPermissionDialog(viewModel: OverviewViewModel) {
+    PermissionDialog(
+        permissionTextProvider = LocationPermissionTextProvider,
+        isPermanentlyDeclined = !shouldShowRequestPermissionRationale(
+            LocalContext.current.findActivity(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ),
+        onDismiss = viewModel::dismissDialog,
+        onOkClick = viewModel::onRequestLocationPermissionClicked,
+        onGoToAppSettingsClick = viewModel::onGoToAppSettingsClicked
+    )
+}
 
 @Composable
 fun CurrentConditionsCard(modifier: Modifier = Modifier, currentConditionsUiState: CurrentConditionsUiState) {

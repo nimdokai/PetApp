@@ -28,5 +28,11 @@
     <string name="temperature_low">Low: %s</string>
     <string name="hourly_forecast">Hourly forecast</string>
     <string name="daily_forecast">Daily forecast</string>
+    <string name="grant_permission">Grant permission</string>
+    <string name="ok">OK</string>
+    <string name="permission_required">Permission required</string>
+    <string name="it_seems_you_permanently_declined_location_permission">"It seems you permanently declined location permission. "</string>
+    <string name="you_can_go_to_the_app_settings_to_grant_it">You can go to the app settings to grant it.</string>
+    <string name="this_app_needs_access_to_display_a_weather_forecast_for_your_location">This app needs access to display a weather forecast for your location.</string>
 
 </resources>

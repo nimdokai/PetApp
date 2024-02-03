@@ -11,7 +11,7 @@ interface DateFormatter {
     fun isToday(epochDate: Int): Boolean
 }
 
-internal object DateFormatterDefault : DateFormatter {
+object DateFormatterDefault : DateFormatter {
     @SuppressLint("SimpleDateFormat")
     override fun formatOnlyHourIfToday(date: String): String {
         val parsedDate = try {

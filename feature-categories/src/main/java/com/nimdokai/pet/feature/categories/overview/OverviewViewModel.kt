@@ -1,10 +1,11 @@
 package com.nimdokai.pet.feature.categories.overview
 
-import androidx.annotation.StringRes
+import android.Manifest
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nimdokai.core_util.AppCoroutineDispatchers
 import com.nimdokai.core_util.date.DateFormatter
+import com.nimdokai.core_util.permissions.PermissionCheckerImpl
 import com.nimdokai.pet.core.data.model.CurrentConditions
 import com.nimdokai.pet.core.data.model.DailyForecast
 import com.nimdokai.pet.core.data.model.HourlyForecast
@@ -20,10 +21,9 @@ import com.nimdokai.pet.core_domain.GetCurrentConditionsUseCase
 import com.nimdokai.pet.core_domain.GetDailyForecastUseCase
 import com.nimdokai.pet.core_domain.GetHourlyForecastUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -32,64 +32,76 @@ import javax.inject.Inject
 @HiltViewModel
 class OverviewViewModel @Inject constructor(
     private val dispatchers: AppCoroutineDispatchers,
-    getCurrentConditionsUseCase: GetCurrentConditionsUseCase,
-    getHourlyForecastUseCase: GetHourlyForecastUseCase,
-    getDailyForecastUseCase: GetDailyForecastUseCase,
-    private val dateFormatter: DateFormatter
+    private val getCurrentConditionsUseCase: GetCurrentConditionsUseCase,
+    private val getHourlyForecastUseCase: GetHourlyForecastUseCase,
+    private val getDailyForecastUseCase: GetDailyForecastUseCase,
+    private val dateFormatter: DateFormatter,
+    private val permissionChecker: PermissionCheckerImpl,
 ) : ViewModel() {
 
-    private val _event = MutableSharedFlow<PetCategoriesEvent>()
-    val event: Flow<PetCategoriesEvent> = _event
+    private val currentConditionsUiState = MutableStateFlow(CurrentConditionsUiState())
+    private val hourlyForecastUiState = MutableStateFlow(HourlyForecastUiState())
+    private val dailyForecastUiState = MutableStateFlow(DailyForecastUiState())
+    private val event = MutableStateFlow<OverviewEvent>(OverviewEvent.Empty)
 
-    val currentConditionsUiState: StateFlow<CurrentConditionsUiState> =
-        getCurrentConditionsUseCase()
-            .map(::mapCurrentConditionsResult)
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = CurrentConditionsUiState(
-                    currentConditions = emptyCurrentWeatherUiState,
-                    isLoading = true
-                )
-            )
+    val state = combine(
+        currentConditionsUiState,
+        hourlyForecastUiState,
+        dailyForecastUiState,
+        event
+    ) { currentConditions, hourlyForecast, dailyForecast, event ->
+        OverviewState(
+            currentConditionsUiState = currentConditions,
+            hourlyForecastUiState = hourlyForecast,
+            dailyForecastUiState = dailyForecast,
+            event = event
+        )
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.Lazily,
+        OverviewState()
+    )
 
-    val hourlyForecastUiState: StateFlow<HourlyForecastUiState> =
-        getHourlyForecastUseCase()
-            .map(::mapHourlyForecastResult)
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = HourlyForecastUiState(
-                    title = R.string.hourly_forecast,
-                    forecasts = emptyList(),
-                    isLoading = true
-                )
-            )
-
-    val dailyForecastUiState: StateFlow<DailyForecastUiState> =
-        getDailyForecastUseCase()
-            .map(::mapDailyForecastResult)
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = DailyForecastUiState(
-                    title = R.string.daily_forecast,
-                    forecasts = emptyList(),
-                    isLoading = true
-                )
-            )
-
-    fun onFirstLaunch() {
-        // screen view analytics here
+    init {
+        getOverviewData()
     }
 
-    fun onRetryGetCategories() {
-    }
-
-    fun onCategoryClicked() =
-        viewModelScope.launch(dispatchers.computation) {
-            // TODO
+    private fun getOverviewData() {
+        val hasPermission = permissionChecker.hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+        if (hasPermission) {
+            requestOverviewData()
+        } else {
+            viewModelScope.launch {
+                event.emit(OverviewEvent.RequestLocationPermission)
+            }
         }
+    }
+
+    private fun requestOverviewData() {
+        viewModelScope.launch {
+            getCurrentConditionsUseCase()
+                .map(::mapCurrentConditionsResult)
+                .collect { conditions ->
+                    currentConditionsUiState.value = conditions
+                }
+        }
+
+        viewModelScope.launch {
+            getHourlyForecastUseCase()
+                .map(::mapHourlyForecastResult)
+                .collect { hourlyForecast ->
+                    hourlyForecastUiState.value = hourlyForecast
+                }
+        }
+
+        viewModelScope.launch {
+            getDailyForecastUseCase()
+                .map(::mapDailyForecastResult)
+                .collect { dailyForecast ->
+                    dailyForecastUiState.value = dailyForecast
+                }
+        }
+    }
 
     private suspend fun mapCurrentConditionsResult(result: DomainResult<out CurrentConditions>): CurrentConditionsUiState {
         return when (result) {
@@ -102,12 +114,12 @@ class OverviewViewModel @Inject constructor(
             }
 
             NoInternet -> {
-                onNoInternet(::onRetryGetCategories)
+                onNoInternet(::requestOverviewData)
                 currentConditionsUiState.value.copy(isLoading = false)
             }
 
             ServerError -> {
-                onServerError(::onRetryGetCategories)
+                onServerError(::requestOverviewData)
                 currentConditionsUiState.value.copy(isLoading = false)
             }
         }
@@ -124,12 +136,12 @@ class OverviewViewModel @Inject constructor(
             }
 
             NoInternet -> {
-                onNoInternet(::onRetryGetCategories)
+                onNoInternet(::requestOverviewData)
                 hourlyForecastUiState.value.copy(isLoading = false)
             }
 
             ServerError -> {
-                onServerError(::onRetryGetCategories)
+                onServerError(::requestOverviewData)
                 hourlyForecastUiState.value.copy(isLoading = false)
             }
         }
@@ -146,20 +158,20 @@ class OverviewViewModel @Inject constructor(
             }
 
             NoInternet -> {
-                onNoInternet(::onRetryGetCategories)
+                onNoInternet(::requestOverviewData)
                 dailyForecastUiState.value.copy(isLoading = false)
             }
 
             ServerError -> {
-                onServerError(::onRetryGetCategories)
+                onServerError(::requestOverviewData)
                 dailyForecastUiState.value.copy(isLoading = false)
             }
         }
     }
 
     private suspend fun onServerError(onRetry: () -> Unit) {
-        _event.emit(
-            PetCategoriesEvent.ShowError(
+        event.emit(
+            OverviewEvent.ShowError(
                 title = R.string.dialog_server_error_title,
                 message = R.string.dialog_server_error_body,
                 buttonText = R.string.dialog_server_error_retry,
@@ -169,8 +181,8 @@ class OverviewViewModel @Inject constructor(
     }
 
     private suspend fun onNoInternet(onRetry: () -> Unit) {
-        _event.emit(
-            PetCategoriesEvent.ShowError(
+        event.emit(
+            OverviewEvent.ShowError(
                 title = R.string.dialog_no_internet_title,
                 message = R.string.dialog_no_internet_body,
                 buttonText = R.string.dialog_no_internet_retry,
@@ -216,35 +228,39 @@ class OverviewViewModel @Inject constructor(
             icon = getWeatherIcon(weatherType),
         )
     }
-}
 
-data class OverviewUiState(
-    val currentConditions: CurrentConditionsUiState
-)
+    fun dismissDialog() {
+        viewModelScope.launch {
+            event.emit(OverviewEvent.Empty)
+        }
+    }
 
-data class CurrentConditionsUiState(
-    val isLoading: Boolean = false,
-    val currentConditions: CurrentWeatherUi,
-)
+    fun onRequestLocationPermissionClicked() {
+        viewModelScope.launch {
+            dismissDialog()
+            event.emit(OverviewEvent.RequestLocationPermission)
+        }
+    }
 
-data class HourlyForecastUiState(
-    @StringRes val title: Int,
-    val isLoading: Boolean = false,
-    val forecasts: List<HourlyForecastUi>,
-)
+    fun onPermissionResult(permission: String, isGranted: Boolean) {
+        if (isGranted && permission == Manifest.permission.ACCESS_COARSE_LOCATION) {
+            getOverviewData()
+        } else {
+            viewModelScope.launch {
+                event.emit(OverviewEvent.ShowPermissionDialog)
+            }
+        }
+    }
 
-data class DailyForecastUiState(
-    @StringRes val title: Int,
-    val isLoading: Boolean = false,
-    val forecasts: List<DailyForecastUi>,
-)
+    fun onGoToAppSettingsClicked() {
+        viewModelScope.launch {
+            event.emit(OverviewEvent.GoToAppSettings)
+        }
+    }
 
-sealed interface PetCategoriesEvent {
-    data class NavigateToCategoryFeed(val categoryID: String) : PetCategoriesEvent
-    data class ShowError(
-        @StringRes val title: Int,
-        @StringRes val message: Int,
-        @StringRes val buttonText: Int,
-        val action: () -> Unit
-    ) : PetCategoriesEvent
+    fun onEventConsumed() {
+        viewModelScope.launch {
+            event.emit(OverviewEvent.Empty)
+        }
+    }
 }
